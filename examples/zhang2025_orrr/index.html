@@ -28,8 +28,9 @@
       --fs-lead:clamp(18px,1.7vw,27px);
       --fs-body:clamp(16px,1.4vw,22px);
       --fs-cap:clamp(12px,.98vw,16px);
-      --px:clamp(36px,5.5vw,110px);
-      --py:clamp(28px,4.2vh,64px);
+      --fs-read:clamp(15px,1.2vw,20px);
+      --px:clamp(28px,4vw,72px);
+      --py:clamp(24px,3.6vh,52px);
     }
     *{box-sizing:border-box;}
     html{scroll-snap-type:y mandatory;scroll-behavior:smooth;background:var(--canvas);-webkit-text-size-adjust:100%;}
@@ -51,17 +52,19 @@
     .label::before{content:attr(data-step);display:grid;place-items:center;width:1.9em;height:1.9em;border:1.5px solid var(--primary);border-radius:50%;font-size:.82em;letter-spacing:0;}
     .title{font-size:var(--fs-title);line-height:1.12;font-weight:730;letter-spacing:-.01em;max-width:26ch;}
     .head{display:grid;gap:clamp(6px,1vh,12px);}
-    .subtitle{font-size:var(--fs-lead);line-height:1.42;color:var(--ink-muted);font-weight:500;max-width:38ch;}
+    .subtitle{font-size:var(--fs-lead);line-height:1.5;color:#4A4A44;font-weight:480;max-width:42ch;}
     .subtitle em{color:var(--ink);font-weight:700;}
+    .subtitle+.subtitle{margin-top:.1em;}
 
     /* clean figure (no overlays, ever) */
     .figwrap{min-height:0;display:grid;place-items:center;}
     .figstage{display:inline-block;line-height:0;max-width:100%;background:#fff;border:1px solid var(--border);border-radius:6px;box-shadow:0 1px 2px rgba(26,26,24,.05),0 18px 44px -26px rgba(26,26,24,.4);}
     .figstage img{width:auto;height:auto;max-width:100%;max-height:var(--cap,60vh);border-radius:6px;}
-    /* reading caption — sits BELOW the figure, never on it */
-    .figcap{font-size:var(--fs-cap);color:var(--ink-muted);line-height:1.45;max-width:96ch;}
-    .figcap b{color:var(--primary);font-weight:700;}
-    .figcap .cite{color:var(--ink-muted);opacity:.8;}
+    .l-split .figstage img{max-height:84vh;}
+    /* reading caption — sits BELOW the figure, never on it. Given real weight. */
+    .figcap{font-size:var(--fs-read);color:#2C2C28;line-height:1.6;max-width:104ch;font-weight:450;}
+    .figcap b{color:var(--primary);font-weight:750;}
+    .figcap .cite{color:var(--ink-muted);font-weight:400;font-size:.86em;}
 
     /* so-what strip */
     .sowhat{display:flex;align-items:baseline;gap:clamp(12px,1.4vw,20px);border-top:2px solid var(--primary);padding-top:clamp(10px,1.4vh,16px);}
@@ -155,7 +158,7 @@
         <p class="meta"><b>Zhang et al., JACS 2025</b> · Why Do Weak-Binding M–N–C Single-Atom Catalysts Possess Anomalously High Oxygen Reduction Activity?</p>
       </div>
       <div class="figwrap">
-        <figure class="figstage" style="--cap:72vh">
+        <figure class="figstage" style="--cap:80vh">
           <img src="assets/zhang2025_fig2_bridge_scaling.png" alt="Atop vs bridge motif, site map, and scaling relations">
         </figure>
       </div>
@@ -170,12 +173,12 @@
         <h2 class="title">약결합 Ni·Cu·Zn이 활성을 잃지 않는다.</h2>
       </div>
       <div class="figwrap">
-        <figure class="figstage" style="--cap:56vh">
+        <figure class="figstage" style="--cap:52vh">
           <img src="assets/zhang2025_fig1_problem.png" alt="Half-wave and onset potential across metals, alkaline vs acidic">
         </figure>
       </div>
       <div class="btm">
-        <p class="figcap"><b>읽는 법 —</b> 각 패널의 보라 점선 오른쪽이 weak-binding(Ni·Cu·Zn). alkaline에서 이들도 높은 half-wave·onset 전위를 유지한다. <span class="cite">Zhang 2025, Fig 1</span></p>
+        <p class="figcap"><b>읽는 법 —</b> 네 패널 모두 왼쪽이 moderate-binding(Mn·Fe·Co), 보라 점선 오른쪽이 weak-binding(Ni·Cu·Zn)이다. 기존 volcano 직관대로면 오른쪽은 활성이 크게 떨어져야 한다. 그러나 특히 alkaline(왼쪽 위·아래 패널)에서는 Ni·Cu·Zn도 Fe·Co에 필적하는 half-wave·onset 전위를 유지한다. <span class="cite">Zhang 2025, Fig 1</span></p>
         <div class="sowhat"><span class="tag">그래서</span><p>결합 세기만으로 활성이 안 갈리면, <em>descriptor가 무언가를 놓친다</em>.</p></div>
       </div>
     </div>
@@ -186,8 +189,8 @@
     <div class="inner l-statement">
       <span class="label" data-step="03">The Old Picture</span>
       <p class="statement">정설은 산소를 <em>금속 원자 하나 위</em>에만 붙잡아 둔다.</p>
-      <p class="substatement">HOO*→O*→HO*가 전부 같은 자리에서 일어난다고 가정한다. 그러면 약하게 붙는 금속은 O* 단계에서 <em>자동으로</em> 손해다.</p>
-      <div class="oldcue">N ligand는 그저 ‘배경’ — reaction site가 아니라고 취급됨</div>
+      <p class="substatement">HOO*→O*→HO*로 이어지는 4전자 경로가 전부 같은 금속 원자 위에서 일어난다고 가정한다. 이 그림에서는 O*가 약하게 붙는 금속일수록 O* 중간체가 불안정해져 <em>자동으로</em> 손해를 본다. 그래서 weak-binding 금속의 고활성은 설명되지 않는다.</p>
+      <div class="oldcue">이웃한 N ligand는 그저 ‘배경’ — reaction site가 아니라고 취급됨</div>
     </div>
   </section>
 
@@ -202,7 +205,8 @@
       <div class="txt">
         <span class="label" data-step="04">The Move</span>
         <h2 class="title">O*가 M–N 다리로 옮겨가면, N도 활성 자리가 된다.</h2>
-        <p class="subtitle">패널 a는 atop(금속 위)와 bridge(금속–N 사이) 구조를, 패널 c의 ✕는 bridge를 선호하는 site를 보여준다. <em>활성 자리는 금속 하나가 아니라 M–N 앙상블이다.</em></p>
+        <p class="subtitle">패널 a는 산소가 금속 바로 위에 앉는 atop과, 금속–N 사이에 걸치는 bridge 두 기하를 보여준다. 패널 c의 지도에서 ✕(bridge 선호)가 특히 weak-binding 금속 쪽에 몰려 있다.</p>
+        <p class="subtitle"><em>즉 활성 자리는 금속 원자 하나가 아니라, 이웃한 N까지 포함한 M–N 앙상블이다.</em></p>
         <p class="cite">Zhang 2025, Fig 2 (a, c)</p>
       </div>
     </div>
@@ -216,12 +220,12 @@
         <h2 class="title">기하가 scaling 관계를 바꾼다.</h2>
       </div>
       <div class="figwrap">
-        <figure class="figstage" style="--cap:56vh">
+        <figure class="figstage" style="--cap:50vh">
           <img src="assets/zhang2025_fig2_bridge_scaling.png" alt="Scaling relations for atop and bridge O adsorption">
         </figure>
       </div>
       <div class="btm">
-        <p class="figcap"><b>패널 d —</b> atop 기울기 1.79 vs bridge 1.36. bridge가 E<sub>O*</sub>–E<sub>HO*</sub> 기울기를 낮춰 weak-binding penalty를 줄인다. <span class="cite">Zhang 2025, Fig 2d</span></p>
+        <p class="figcap"><b>패널 d —</b> 세로축 E<sub>O*</sub>, 가로축 E<sub>HO*</sub>의 scaling 관계다. atop만 보면 기울기가 1.79로 가팔라, HO*가 약하게 붙는 금속은 O*도 크게 불리해진다. 그러나 bridge를 허용하면 기울기가 1.36으로 완만해져, 같은 weak-binding에서도 O* penalty가 줄어든다. <span class="cite">Zhang 2025, Fig 2d</span></p>
         <div class="sowhat"><span class="tag">그래서</span><p>descriptor가 결합 세기가 아니라 <em>위치에 의존</em>한다.</p></div>
       </div>
     </div>
@@ -238,7 +242,8 @@
       <div class="txt">
         <span class="label" data-step="06">Not Just Energy</span>
         <h2 class="title">위치가 field·용매 반응까지 바꾼다.</h2>
-        <p class="subtitle">atop과 bridge는 전기장과 용매 안정화에 서로 다르게 반응한다. <em>field·solvation은 보정이 아니라 메커니즘의 일부다.</em></p>
+        <p class="subtitle">같은 O*라도 atop과 bridge는 외부 전기장(패널 a·b)과 주변 용매의 안정화(패널 e)에 서로 다른 크기로 반응한다. 그래서 전위와 pH가 바뀌면 두 경로의 우열도 함께 달라진다.</p>
+        <p class="subtitle"><em>field·solvation은 부수적 보정이 아니라 메커니즘의 일부다.</em></p>
         <p class="cite">Zhang 2025, Fig 3</p>
       </div>
     </div>
@@ -252,12 +257,12 @@
         <h2 class="title">bridge 경로는 volcano 정점을 weak-binding 쪽으로 민다.</h2>
       </div>
       <div class="figwrap">
-        <figure class="figstage" style="--cap:54vh">
+        <figure class="figstage" style="--cap:50vh">
           <img src="assets/zhang2025_fig4_volcano_clean.png" alt="Atop vs bridge pH-dependent activity volcanoes">
         </figure>
       </div>
       <div class="btm">
-        <p class="figcap"><b>읽는 법 —</b> 왼쪽 atop은 정점이 강결합 쪽이라 약결합 금속이 탈락한다. 오른쪽 bridge는 정점이 오른쪽으로 이동해 Cu가 활성 구간으로 들어온다. <span class="cite">Zhang 2025, Fig 4</span></p>
+        <p class="figcap"><b>읽는 법 —</b> 두 볼케이노는 활성(세로)을 결합 세기(가로)에 대해 그린 것이다. 왼쪽 atop은 정점이 강하게 붙는 쪽에 있어 Ni·Cu 같은 약결합 금속이 비탈 아래로 밀려난다. 오른쪽 bridge는 정점 자체가 오른쪽(약결합)으로 옮겨가, Cu가 고활성 구간 안으로 들어온다. <span class="cite">Zhang 2025, Fig 4</span></p>
         <div class="sowhat"><span class="tag">그래서</span><p>site 기하가 곧 <em>kinetic descriptor</em>로 작동한다 — anomaly가 예측 안으로 들어온다.</p></div>
       </div>
     </div>
