@@ -1,108 +1,80 @@
 # Computational Paper Review Deck
 
-Reusable GitHub template for making HTML presentation decks for computational science paper reviews.
+A reusable GitHub template + agent skill for turning **one computational-science paper into a
+polished HTML slide deck** for journal club. Works with **Claude Code or Codex** (or any coding agent).
 
-This repository is for journal-club style academic presentations, not websites, landing pages, dashboards, or SaaS UI. It is designed for DFT, AIMD, MD, MLIP, computational catalysis, batteries, surfaces, defects, phase stability, and materials informatics papers.
+For DFT, AIMD, MD, MLIP, computational catalysis, batteries, surfaces, defects, phase stability,
+and materials informatics — not websites, dashboards, or SaaS UI.
 
-The intended output is a local `index.html` slide deck with:
+The output is a single `index.html` that:
 
-- Korean explanations with standard English technical terms preserved
-- large paper figures
-- claim-style slide titles
-- a consistent warm academic visual style
-- a reusable scientific review structure
+- is a **scroll-snap deck** — mouse wheel / trackpad scrolls up/down and snaps one slide at a time,
+  plus keyboard nav (↑/↓/←/→, Space, Home/End), a progress rail, and a slide counter
+- is figure-first with claim-style titles and Korean text (English technical terms preserved)
+- uses a warm, restrained academic style (Anthropic-inspired), fully responsive via `clamp()`
+- opens offline from the file and prints to clean 16:9 PDF pages
 
-## Repo Structure
+The shipped `index.html` is a **worked reference** (Zhang et al., JACS 2025, ORR single-atom
+catalysts). Use it as the quality bar and regenerate it for your own paper.
+
+## How the agent knows what to do
+
+- `AGENTS.md` — the single behavior contract (Codex + any agent read this).
+- `CLAUDE.md` — points Claude Code to `AGENTS.md` so both agents follow identical rules.
+- `DESIGN.md` — the visual system **and the reusable component library** (§4) the agent must reuse.
+- `REVIEW_FRAMEWORK.md` — how to critique a computational paper (DFT/MLIP/AIMD checklists).
+- `PROMPT_TEMPLATE.md` — the paste-ready kickoff prompt.
+
+## Repo structure
 
 ```text
 computational-paper-review-deck/
-  README.md
-  AGENTS.md
-  DESIGN.md
-  CONTENT_TEMPLATE.md
-  REVIEW_FRAMEWORK.md
-  PROMPT_TEMPLATE.md
-  index.html
+  index.html            # gold reference deck — reuse its components & CSS
+  AGENTS.md             # behavior contract (single source of truth)
+  CLAUDE.md             # Claude Code pointer -> AGENTS.md
+  DESIGN.md             # design system + component library + rules + checklist
+  REVIEW_FRAMEWORK.md   # computational-science critique checklist
+  CONTENT_TEMPLATE.md   # per-paper narrative template -> copy to CONTENT.md
+  PROMPT_TEMPLATE.md    # paste-ready prompt
   scripts/
-    extract_figures.py
-    create_project.py
-  assets/
-    .gitkeep
-  papers/
-    .gitkeep
-  examples/
-    .gitkeep
+    extract_figures.py  # pull embedded figures out of a PDF into assets/
+    create_project.py   # scaffold CONTENT.md
+  assets/               # figures for the current deck
+  papers/               # source PDFs
+  examples/             # frozen example decks
 ```
 
-## Workflow For A New Paper
-
-1. Put the paper PDF in `papers/`.
-2. Run the figure extraction script:
+## Workflow for a new paper
 
 ```bash
-python scripts/extract_figures.py papers/example.pdf --out assets
+# 1. add the PDF
+cp mypaper.pdf papers/
+
+# 2. extract embedded figures
+python scripts/extract_figures.py papers/mypaper.pdf --out assets
+
+# 3. scaffold and fill the narrative
+python scripts/create_project.py            # creates CONTENT.md
+#    ...fill CONTENT.md (claim per slide, which figure, why it matters)
+
+# 4. let the agent build the deck
+#    Claude Code / Codex: paste PROMPT_TEMPLATE.md (it reads AGENTS.md + DESIGN.md + CONTENT.md)
+
+# 5. open index.html in a browser and check the DESIGN.md §9 pre-flight checklist
 ```
 
-3. Create a paper-specific `CONTENT.md`:
+## Using it like a skill
+
+Keep this repo on GitHub. For each new paper, clone/copy it, drop the PDF in `papers/`, extract
+figures, fill `CONTENT.md`, and paste `PROMPT_TEMPLATE.md`. The agent reuses the reference deck's
+components, so every deck comes out in the same high-quality, consistent style.
+
+## Figure extraction
+
+`scripts/extract_figures.py` pulls embedded bitmap images from a PDF into `assets/` — no OCR, no
+internet, no text extraction. Vector-only figures won't extract; screenshot or export those manually.
 
 ```bash
-python scripts/create_project.py
+python scripts/extract_figures.py papers/mypaper.pdf --out assets \
+  --min-width 180 --min-height 120 --min-area 40000
 ```
-
-4. Fill `CONTENT.md` using the paper's scientific story:
-
-- What problem is unresolved?
-- What old model or descriptor is incomplete?
-- What new hypothesis, method, or mechanism is proposed?
-- What computation supports the claim?
-- What validates it?
-- What assumptions or limitations matter?
-
-5. Ask Codex to generate or refactor `index.html` using:
-
-- `AGENTS.md`
-- `DESIGN.md`
-- `REVIEW_FRAMEWORK.md`
-- `CONTENT.md`
-- `assets/`
-
-The paste-ready prompt is in `PROMPT_TEMPLATE.md`.
-
-6. Open `index.html` locally in a browser.
-
-## Figure Extraction
-
-The script extracts embedded bitmap images from the PDF into `assets/`.
-
-```bash
-python scripts/extract_figures.py papers/my_paper.pdf --out assets
-```
-
-Optional filters:
-
-```bash
-python scripts/extract_figures.py papers/my_paper.pdf --out assets --min-width 180 --min-height 120 --min-area 40000
-```
-
-The script does not use OCR, does not require internet, and does not extract text. It only extracts embedded images. If a publisher PDF stores figures as vector graphics, use screenshots or manual export for those figures.
-
-## How To Use This Like A Skill
-
-Keep this repository on GitHub. For each new paper:
-
-1. Clone or copy this repo.
-2. Add the PDF to `papers/`.
-3. Extract figures into `assets/`.
-4. Fill `CONTENT.md`.
-5. Paste `PROMPT_TEMPLATE.md` into Codex.
-
-`AGENTS.md` is the main behavior guide for Codex. It tells Codex what kind of deck to make, what to avoid, and how to structure computational science reviews.
-
-## What To Customize First
-
-- `CONTENT.md`: paper-specific scientific story
-- `assets/`: extracted or manually selected figures
-- `DESIGN.md`: visual style only if you want to change the look
-- `REVIEW_FRAMEWORK.md`: lab-specific review criteria
-
-Keep `AGENTS.md` strict. That file prevents Codex from turning the deck into a generic website.

@@ -1,77 +1,43 @@
 # PROMPT_TEMPLATE.md
 
-Paste this into Codex when you want to create or refactor a deck for a new paper.
+Paste this to Claude Code or Codex to create or refactor a deck for a new paper.
+(Both agents also auto-read `AGENTS.md` / `CLAUDE.md` in this repo — this prompt just kicks it off.)
 
 ```text
-I am making an HTML presentation deck for a computational science journal club.
+I am making an HTML journal-club deck for a computational science paper.
 
-Read:
-- AGENTS.md
-- DESIGN.md
+Read, in order:
+- AGENTS.md   (the behavior contract — follow it exactly)
+- DESIGN.md   (visual system + the component library you must reuse)
 - REVIEW_FRAMEWORK.md
-- CONTENT.md
-- assets/
-- index.html if it exists
+- CONTENT.md  (the paper's narrative; if missing, use CONTENT_TEMPLATE.md)
+- assets/     (available figures)
+- index.html  (the GOLD reference deck — copy its structure and CSS, do not reinvent them)
 
 Task:
-Create or refactor index.html into a polished academic HTML slide deck.
+Regenerate index.html into a polished academic slide deck for THIS paper by pouring the
+CONTENT.md narrative into the reference deck's existing components.
 
-Important:
-This is not a website, landing page, dashboard, blog article, or SaaS UI.
-This is a research presentation for DFT / AIMD / MD / MLIP / computational materials science papers.
+This is a research presentation for DFT / AIMD / MD / MLIP / computational materials papers —
+not a website, landing page, dashboard, blog, or SaaS UI.
 
-Use DESIGN.md for:
-- colors
-- typography
-- spacing
-- visual mood
+Hard requirements:
+1. Reuse index.html's component system verbatim (see DESIGN.md §4). Do not rewrite the CSS.
+2. One full-viewport <section class="slide" id="sN"> per section; the nav JS adapts automatically.
+3. Claim-style titles only — reading the titles in order must tell the whole story.
+4. Max 3 cues / ~45 Korean words per slide; Korean explanation, English technical terms preserved.
+5. One dominant figure per content slide; alternate figure side (layout-split-l ↔ layout-split-r).
+6. Captions say why the figure matters / how to read it. Never crop or stretch figures.
+7. Preserve existing image paths. Do not invent figures or claims; missing figure → labeled placeholder.
+8. Keep the native scroll-snap navigation intact: wheel/trackpad snaps between slides, plus
+   keyboard (↑/↓/←/→, Space, Home/End), a fixed slide counter, and a progress rail. (DESIGN.md §8)
+9. No external fonts/scripts/network — must open offline from the file. Keep the @media print pages.
 
-Use CONTENT.md for:
-- scientific narrative
-- slide order
-- slide messages
-- figure choices
-- presenter notes
+Before editing: summarize the narrative structure you inferred from CONTENT.md.
 
-Use REVIEW_FRAMEWORK.md for:
-- computational science critique
-- DFT / MLIP / AIMD / MD review questions
-- validation and limitation framing
-
-Strict requirements:
-1. One full-screen 16:9 slide per section.
-2. Each slide must have one main scientific message.
-3. Use claim-style slide titles.
-4. Keep figures large and central.
-5. Maximum 3 bullets per slide.
-6. Maximum 45 Korean words per slide, excluding captions.
-7. Use Korean explanation with English technical terms where natural.
-8. Do not invent scientific claims.
-9. Do not invent missing figures.
-10. Preserve existing image paths.
-11. Include keyboard navigation with left/right arrows.
-12. Make index.html runnable locally by opening the file.
-13. Avoid sticky navigation, progress bars, signup buttons, product cards, web-app components, dashboard widgets, and long scrolling article sections.
-
-Recommended slide flow:
-- Title / thesis
-- Scientific problem
-- Conventional understanding
-- New idea / hypothesis
-- Computational setup
-- Main result
-- Mechanism / interpretation
-- Validation / benchmark
-- Limitations / assumptions
-- Discussion / take-home
-
-Before editing:
-Briefly summarize the likely narrative structure from CONTENT.md.
-
-After editing:
-Report:
+After editing: open/verify the deck and run the DESIGN.md §9 pre-flight checklist, then report:
 - what changed
 - how DESIGN.md was applied
-- how CONTENT.md was translated into slides
+- how CONTENT.md became slides
 - any missing figures or remaining limitations
 ```
