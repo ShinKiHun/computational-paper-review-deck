@@ -1,0 +1,100 @@
+/*-- scss:defaults --*/
+
+$font-family-sans-serif: "Arial", "Noto Sans KR", "Malgun Gothic", sans-serif;
+$presentation-heading-font: "Arial", "Noto Sans KR", "Malgun Gothic", sans-serif;
+$presentation-font-size-root: 34px;
+$presentation-heading-color: #22324a;
+$presentation-heading-text-transform: none;
+$body-bg: #fafafa;
+$body-color: #1f2933;
+$link-color: #3366aa;
+
+/*-- scss:rules --*/
+
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  letter-spacing: 0;
+  line-height: 1.12;
+  font-weight: 720;
+}
+
+.reveal h2 {
+  font-size: 1.26em;
+  margin-bottom: 0.55em;
+}
+
+.reveal p,
+.reveal li,
+.reveal td,
+.reveal th {
+  line-height: 1.28;
+}
+
+.reveal ul,
+.reveal ol {
+  margin-left: 1.05em;
+}
+
+.reveal li + li {
+  margin-top: 0.28em;
+}
+
+.reveal strong {
+  color: #22324a;
+}
+
+.reveal blockquote {
+  width: 92%;
+  margin: 0.6em 0;
+  padding: 0.6em 0.8em;
+  border-left: 6px solid #4d7ea8;
+  background: #eef3f7;
+  box-shadow: none;
+  font-style: normal;
+}
+
+.reveal table {
+  font-size: 0.72em;
+  width: 100%;
+}
+
+.reveal table th {
+  color: #22324a;
+  border-bottom: 2px solid #8898aa;
+}
+
+.reveal img {
+  max-height: 560px;
+  object-fit: contain;
+}
+
+.reveal .caption {
+  margin-top: 0.35em;
+  color: #687789;
+  font-size: 0.48em;
+  line-height: 1.2;
+}
+
+.reveal .columns {
+  gap: 1.2em;
+  align-items: center;
+}
+
+.reveal .slide-number {
+  color: #687789;
+}
+
+.reveal .footer {
+  color: #687789;
+  font-size: 0.42em;
+}
+
+.reveal .progress {
+  color: #4d7ea8;
+}
+
+.reveal section.section h1 {
+  color: #22324a;
+}
+

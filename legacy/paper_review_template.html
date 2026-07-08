@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Paper Review Template</title>
+  <style>
+    :root {
+      --bg: #f8faf7;
+      --ink: #1f2933;
+      --muted: #637083;
+      --navy: #22324a;
+      --teal: #2f7f82;
+      --amber: #b07a2a;
+      --line: #d9e0e6;
+      --panel: #ffffff;
+      --soft: #edf4f4;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Arial, "Noto Sans KR", "Malgun Gothic", sans-serif;
+      letter-spacing: 0;
+    }
+
+    .deck {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .slide {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      padding: 4.8vh 5.6vw 5.4vh;
+      position: relative;
+    }
+
+    .slide.active {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 2.4vh;
+    }
+
+    .title-slide.active {
+      align-content: center;
+      grid-template-rows: 1fr auto 1fr;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      max-width: 980px;
+      color: var(--navy);
+      font-size: clamp(44px, 5.2vw, 78px);
+      line-height: 1.05;
+      font-weight: 760;
+    }
+
+    h2 {
+      color: var(--navy);
+      font-size: clamp(30px, 3.3vw, 52px);
+      line-height: 1.12;
+      font-weight: 760;
+    }
+
+    h3 {
+      color: var(--navy);
+      font-size: clamp(22px, 1.8vw, 30px);
+      line-height: 1.18;
+      font-weight: 720;
+    }
+
+    p,
+    li,
+    td,
+    th {
+      font-size: clamp(18px, 1.55vw, 28px);
+      line-height: 1.34;
+    }
+
+    ul,
+    ol {
+      margin: 0;
+      padding-left: 1.2em;
+    }
+
+    li + li {
+      margin-top: 0.36em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--line);
+      padding: 0.45em 0.55em;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--navy);
+      font-weight: 720;
+    }
+
+    .subtitle {
+      margin-top: 1.3em;
+      color: var(--muted);
+      font-size: clamp(20px, 1.7vw, 30px);
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: clamp(16px, 1.2vw, 22px);
+    }
+
+    .content {
+      min-height: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.2vw;
+      align-items: center;
+      height: 100%;
+    }
+
+    .grid.wide-left {
+      grid-template-columns: 1.45fr 0.95fr;
+    }
+
+    .grid.wide-right {
+      grid-template-columns: 0.9fr 1.35fr;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 1.2em;
+    }
+
+    .panel + .panel {
+      margin-top: 1em;
+    }
+
+    .kicker {
+      color: var(--teal);
+      font-size: clamp(16px, 1.1vw, 20px);
+      font-weight: 720;
+      text-transform: uppercase;
+      letter-spacing: 0;
+      margin-bottom: 0.7em;
+    }
+
+    .quote {
+      border-left: 6px solid var(--teal);
+      background: var(--soft);
+      padding: 0.75em 0.95em;
+      margin-top: 1em;
+      font-size: clamp(22px, 2vw, 34px);
+      color: var(--navy);
+      line-height: 1.25;
+      font-weight: 680;
+    }
+
+    .figure-box {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      border: 2px dashed #aab7c4;
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(47, 127, 130, 0.12), transparent 42%),
+        #ffffff;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      text-align: center;
+      padding: 1.2em;
+      font-size: clamp(18px, 1.5vw, 26px);
+      line-height: 1.3;
+    }
+
+    .caption {
+      margin-top: 0.6em;
+      color: var(--muted);
+      font-size: clamp(13px, 0.92vw, 17px);
+      line-height: 1.25;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 0.6em;
+      flex-wrap: wrap;
+      margin-top: 1.2em;
+    }
+
+    .badge {
+      border: 1px solid var(--line);
+      color: var(--navy);
+      background: #fff;
+      border-radius: 999px;
+      padding: 0.38em 0.72em;
+      font-size: clamp(14px, 1vw, 18px);
+      font-weight: 680;
+    }
+
+    .callout {
+      border-left: 6px solid var(--amber);
+      background: #fff8eb;
+      padding: 0.85em 1em;
+      color: #4b3820;
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: clamp(12px, 0.88vw, 16px);
+      border-top: 1px solid var(--line);
+      padding-top: 1.2vh;
+    }
+
+    .controls {
+      position: fixed;
+      right: 1.3vw;
+      bottom: 1.8vh;
+      display: flex;
+      gap: 0.5rem;
+      z-index: 5;
+    }
+
+    .controls button {
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--navy);
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .progress {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      height: 5px;
+      width: 100%;
+      background: #dde5ec;
+      z-index: 4;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: var(--teal);
+      transition: width 160ms ease;
+    }
+
+    @media (max-width: 800px) {
+      .slide {
+        padding: 4vh 5vw 6vh;
+      }
+
+      .slide.active {
+        overflow: auto;
+      }
+
+      .grid,
+      .grid.wide-left,
+      .grid.wide-right {
+        grid-template-columns: 1fr;
+      }
+
+      .controls {
+        display: none;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .deck {
+        height: auto;
+        overflow: visible;
+      }
+
+      .slide,
+      .slide.active {
+        display: grid;
+        width: 100vw;
+        height: 100vh;
+        break-after: page;
+      }
+
+      .controls,
+      .progress {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" id="deck">
+    <section class="slide title-slide active">
+      <div></div>
+      <div>
+        <p class="kicker">SNU MSE Computational Science Journal Club</p>
+        <h1>Paper Title</h1>
+        <p class="subtitle">Journal, Year | Presenter Name | YYYY-MM-DD</p>
+        <div class="badge-row">
+          <span class="badge">DFT</span>
+          <span class="badge">MLIP</span>
+          <span class="badge">AI / LLM</span>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Paper review template</span>
+        <span class="counter"></span>
+      </div>
+    </section>
+
+    <section class="slide">
+      <h2>Paper snapshot</h2>
+      <div class="content grid wide-left">
+        <div>
+          <div class="panel">
+            <h3>Citation</h3>
+            <ul>
+              <li>Authors:</li>
+              <li>Journal / year:</li>
+              <li>DOI:</li>
+              <li>Field: DFT / MLIP / AI / LLM / other</li>
+            </ul>
+          </div>
+          <p class="quote">Replace this with the single most important message of the paper.</p>
+        </div>
+        <div>
+          <div class="figure-box">Representative figure<br>or graphical abstract</div>
+          <p class="caption">From/Adapted from Author et al.</p>
+        </div>
+      </div>
+      <div class="footer"><span>Snapshot</span><span class="counter"></span></div>
+    </section>
+
+    <section class="slide">
+      <h2>This paper addresses a specific bottleneck in [field/problem]</h2>
+      <div class="content grid">
+        <div class="panel">
+          <h3>Known context</h3>
+          <ul>
+            <li>What is already known?</li>
+            <li>What materials system or task matters here?</li>
+            <li>Why does this problem matter for materials science?</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Open bottleneck</h3>
+          <ul>
+            <li>What remains hard?</li>
+            <li>What did previous studies miss?</li>
+            <li>Why is this paper timely?</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer"><span>Motivation</span><span class="counter"></span></div>
+    </section>
+
+    <section class="slide">
+      <h2>Previous approaches leave [gap] unresolved</h2>
+      <div class="content">
+        <table>
+          <thead>
+            <tr>
+              <th>Approach</th>
+              <th>Strength</th>
+              <th>Remaining issue</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Prior work 1</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Prior work 2</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>This paper</td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="footer"><span>Gap</span><span class="counter"></span></div>
+    </section>
+
+    <section class="slide">
+      <h2>The main claim is [claim in one sentence]</h2>
+      <div class="content grid">
+        <div class="panel">
+          <h3>Authors' claim</h3>
+          <ul>
+            <li>Claim 1:</li>
+            <li>Claim 2:</li>
+            <li>Claim 3:</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Evidence map</h3>
+          <ol>
+            <li>Method / dataset establishes ...</li>
+            <li>Key result 1 shows ...</li>
+            <li>Key result 2 supports ...</li>
+            <li>Validation confirms ...</li>
+          </ol>
+        </div>
+      </div>
+      <div class="footer"><span>Main claim</span><span class="counter"></span></div>
+    </section>
+
+    <section class="slide">
+      <h2>The study combines [method/data/model] to test the claim</h2>
+      <div class="content grid wide-left">
+        <div>
+          <div class="figure-box">Method pipeline<br>DFT workflow / MLIP loop / AI system diagram</div>
+          <p class="caption">From/Adapted from Author et al.</p>
+        </div>
+        <div>
+          <div class="panel">
+            <h3>Method overview</h3>
+            <ul>
+              <li>Input:</li>
+              <li>Calculation / model:</li>
+              <li>Output:</li>
+              <li>Validation:</li>
+            </ul>
+          </div>
+          <div class="callout">
+            <p><strong>What to watch:</strong> key assumption, possible weak point, or comparison that matters most.</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Method</span><span class="counter"></span></div>
+    </section>
+
+    <section class="slide">
+      <h2>Computational details define the reliability boundary</h2>
+      <div class="content grid" style="grid-template-columns: repeat(3, 1fr); align-items: stretch;">
+        <div class="panel">
+          <h3>DFT</h3>
+          <ul>
+            <li>Code:</li>
+            <li>XC functional:</li>
+            <li>Cutoff / k-points:</li>
+            <li>Supercell:</li>
+            <li>U / vdW / SOC:</li>
+            <li>Convergence:</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>MLIP</h3>
+          <ul>
+            <li>DFT dataset:</li>
+            <li>Model:</li>
+            <li>Train/val/test:</li>
+            <li>Active learning:</li>
+            <li>Error metrics:</li>
+            <li>OOD test:</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>AI / LLM</h3>
+          <ul>
+            <li>Task:</li>
+            <li>Dataset:</li>
+            <li>Model:</li>
+            <li>Prompt/RAG/tuning:</li>
+            <li>Baselines:</li>
+            <li>Metrics:</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer"><span>Reliability boundary</span><span class="counter"></span></div>
+    </section>
+
+    <section class="slide">
+      <h2>Key result 1: [figure-level conclusion]</h2>
+      <div class="content grid wide-left">
+        <div>
+          <div class="figure-box">Key result figure 1</div>
+          <p class="caption">From/Adapted from Author et al.</p>
+        </div>
+        <div class="panel">
+          <h3>Read the figure</h3>
+          <ul>
+            <li><strong>What was done:</strong></li>
+            <li><strong>What was observed:</strong></li>
+            <li><strong>Why it matters:</strong></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer"><span>Result 1</span><span class="counter"></span></div>
+    </section>
+
+    <section class="slide">
+      <h2>Key result 2: [figure-level conclusion]</h2>
+      <div class="content grid wide-left">
+        <div>
+          <div class="figure-box">Key result figure 2</div>
+          <p class="caption">From/Adapted from Author et al.</p>
+        </div>
+        <div class="panel">
+          <h3>Read the figure</h3>
+          <ul>
+            <li><strong>What was done:</strong></li>
+            <li><strong>What was observed:</strong></li>
+            <li><strong>Why it matters:</strong></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer"><span>Result 2</span><span class="counter"></span></div>
+    </section>
+
+    <section class="slide">
+      <h2>Key result 3: [figure-level conclusion]</h2>
+      <div class="content grid wide-left">
+        <div>
+          <div class="figure-box">Key result figure 3</div>
+          <p class="caption">From/Adapted from Author et al.</p>
+        </div>
+        <div class="panel">
+          <h3>Read the figure</h3>
+          <ul>
+            <li><strong>What was done:</strong></li>
+            <li><strong>What was observed:</strong></li>
+            <li><strong>Why it matters:</strong></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer"><span>Result 3</span><span class="counter"></span></div>
+    </section>
+
+    <section class="slide">
+      <h2>The evidence supports [main claim] through [mechanism/validation]</h2>
+      <div class="content">
+        <table>
+          <thead>
+            <tr>
+              <th>Evidence</th>
+              <th>Supports</th>
+              <th>Confidence</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Figure 1</td>
+              <td></td>
+              <td>High / Medium / Low</td>
+            </tr>
+            <tr>
+              <td>Figure 2</td>
+              <td></td>
+              <td>High / Medium / Low</td>
+            </tr>
+            <tr>
+              <td>Figure 3</td>
+              <td></td>
+              <td>High / Medium / Low</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="footer"><span>Synthesis</span><span class="counter"></span></div>
+    </section>
+
+    <section class="slide">
+      <h2>The paper is strongest where [strength]</h2>
+      <div class="content grid">
+        <div class="panel">
+          <h3>Strengths</h3>
+          <ul>
+            <li>Strong point 1:</li>
+            <li>Strong point 2:</li>
+            <li>Strong point 3:</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Why it is convincing</h3>
+          <ul>
+            <li>Evidence quality:</li>
+            <li>Benchmark quality:</li>
+            <li>Clarity of mechanism:</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer"><span>Strengths</span><span class="counter"></span></div>
+    </section>
+
+    <section class="slide">
+      <h2>The main uncertainty is [limitation]</h2>
+      <div class="content grid">
+        <div class="panel">
+          <h3>Limitations</h3>
+          <ul>
+            <li>Data / structure coverage:</li>
+            <li>Method assumption:</li>
+            <li>Missing comparison:</li>
+            <li>Generalizability:</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>What would make it stronger</h3>
+          <ul>
+            <li>Additional calculation:</li>
+            <li>Additional benchmark:</li>
+            <li>Ablation / control:</li>
+            <li>Experimental validation:</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer"><span>Limitations</span><span class="counter"></span></div>
+    </section>
+
+    <section class="slide">
+      <h2>Discussion questions</h2>
+      <div class="content">
+        <ol>
+          <li>Which evidence is most convincing, and why?</li>
+          <li>Which assumption is most fragile?</li>
+          <li>What result would change our interpretation of this paper?</li>
+        </ol>
+      </div>
+      <div class="footer"><span>Discussion</span><span class="counter"></span></div>
+    </section>
+
+    <section class="slide">
+      <h2>Take-home message</h2>
+      <div class="content">
+        <p class="quote">Replace this with the final message people should remember after the discussion.</p>
+        <div class="panel">
+          <h3>Three points</h3>
+          <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer"><span>Take-home</span><span class="counter"></span></div>
+    </section>
+  </main>
+
+  <div class="controls" aria-label="Slide controls">
+    <button type="button" id="prev" aria-label="Previous slide">&lsaquo;</button>
+    <button type="button" id="next" aria-label="Next slide">&rsaquo;</button>
+  </div>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const counters = Array.from(document.querySelectorAll(".counter"));
+    const progressBar = document.getElementById("progressBar");
+    const prevButton = document.getElementById("prev");
+    const nextButton = document.getElementById("next");
+    let current = 0;
+
+    function clampIndex(index) {
+      return Math.max(0, Math.min(index, slides.length - 1));
+    }
+
+    function showSlide(index) {
+      current = clampIndex(index);
+      slides.forEach((slide, slideIndex) => {
+        slide.classList.toggle("active", slideIndex === current);
+      });
+      counters.forEach((counter) => {
+        counter.textContent = `${current + 1} / ${slides.length}`;
+      });
+      progressBar.style.width = `${((current + 1) / slides.length) * 100}%`;
+      window.location.hash = `slide-${current + 1}`;
+    }
+
+    function readHash() {
+      const match = window.location.hash.match(/slide-(\d+)/);
+      if (match) {
+        showSlide(Number(match[1]) - 1);
+      } else {
+        showSlide(0);
+      }
+    }
+
+    prevButton.addEventListener("click", () => showSlide(current - 1));
+    nextButton.addEventListener("click", () => showSlide(current + 1));
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") {
+        event.preventDefault();
+        showSlide(current + 1);
+      }
+      if (event.key === "ArrowLeft" || event.key === "PageUp") {
+        event.preventDefault();
+        showSlide(current - 1);
+      }
+      if (event.key === "Home") {
+        event.preventDefault();
+        showSlide(0);
+      }
+      if (event.key === "End") {
+        event.preventDefault();
+        showSlide(slides.length - 1);
+      }
+    });
+
+    window.addEventListener("hashchange", readHash);
+    readHash();
+  </script>
+</body>
+</html>
+

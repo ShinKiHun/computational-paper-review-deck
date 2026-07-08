@@ -1,0 +1,312 @@
+---
+title: "Paper Title"
+subtitle: "Journal, Year | Presenter Name | YYYY-MM-DD"
+author: "SNU MSE Computational Science Journal Club"
+format:
+  revealjs:
+    theme: [default, styles.scss]
+    width: 1600
+    height: 900
+    margin: 0.06
+    transition: none
+    slide-number: c/t
+    footer: "SNU MSE Computational Science Journal Club"
+execute:
+  echo: false
+---
+
+## Paper snapshot
+
+:::: {.columns}
+::: {.column width="58%"}
+**Citation**
+
+- Authors:
+- Journal / year:
+- DOI:
+- Field: DFT / MLIP / AI / LLM / other
+
+**One-line summary**
+
+> Replace this with the single most important message of the paper.
+:::
+
+::: {.column width="42%"}
+![](assets/paper_figure_overview.png){fig-alt="Representative figure from the paper"}
+
+::: {.caption}
+From/Adapted from Author et al.
+:::
+:::
+::::
+
+::: {.notes}
+Start by telling the audience what kind of paper this is and why it is worth discussing.
+:::
+
+## This paper addresses a specific bottleneck in [field/problem]
+
+:::: {.columns}
+::: {.column width="50%"}
+**Known context**
+
+- What is already known?
+- What materials system or task matters here?
+- Why does this problem matter for materials science?
+:::
+
+::: {.column width="50%"}
+**Open bottleneck**
+
+- What remains hard?
+- What did previous studies miss?
+- Why is this paper timely?
+:::
+::::
+
+## Previous approaches leave [gap] unresolved
+
+Use this slide only if the paper needs context from earlier work.
+
+| Approach | Strength | Remaining issue |
+|---|---|---|
+| Prior work 1 |  |  |
+| Prior work 2 |  |  |
+| This paper |  |  |
+
+## The main claim is [claim in one sentence]
+
+:::: {.columns}
+::: {.column width="45%"}
+**Authors' claim**
+
+- Claim 1:
+- Claim 2:
+- Claim 3:
+:::
+
+::: {.column width="55%"}
+**Evidence map**
+
+1. Method / dataset establishes ...
+2. Key result 1 shows ...
+3. Key result 2 supports ...
+4. Validation confirms ...
+:::
+::::
+
+# Method
+
+## The study combines [method/data/model] to test the claim
+
+:::: {.columns}
+::: {.column width="52%"}
+![](assets/method_pipeline.png){fig-alt="Method or workflow diagram"}
+
+::: {.caption}
+From/Adapted from Author et al.
+:::
+:::
+
+::: {.column width="48%"}
+**Method overview**
+
+- Input:
+- Calculation / model:
+- Output:
+- Validation:
+
+**What to watch**
+
+- Key assumption:
+- Possible weak point:
+:::
+::::
+
+## Computational details define the reliability boundary
+
+Choose the relevant block and delete the others.
+
+:::: {.columns}
+::: {.column width="33%"}
+**DFT**
+
+- Code:
+- XC functional:
+- Cutoff / k-points:
+- Supercell:
+- U / vdW / SOC:
+- Convergence:
+:::
+
+::: {.column width="33%"}
+**MLIP**
+
+- DFT dataset:
+- Model:
+- Train/val/test:
+- Active learning:
+- Error metrics:
+- OOD test:
+:::
+
+::: {.column width="33%"}
+**AI / LLM**
+
+- Task:
+- Dataset:
+- Model:
+- Prompt/RAG/tuning:
+- Baselines:
+- Metrics:
+:::
+::::
+
+# Results
+
+## Key result 1: [figure-level conclusion]
+
+:::: {.columns}
+::: {.column width="62%"}
+![](assets/key_result_1.png){fig-alt="Key result figure 1"}
+
+::: {.caption}
+From/Adapted from Author et al.
+:::
+:::
+
+::: {.column width="38%"}
+**What was done**
+
+- 
+
+**What was observed**
+
+- 
+
+**Why it matters**
+
+- 
+:::
+::::
+
+## Key result 2: [figure-level conclusion]
+
+:::: {.columns}
+::: {.column width="62%"}
+![](assets/key_result_2.png){fig-alt="Key result figure 2"}
+
+::: {.caption}
+From/Adapted from Author et al.
+:::
+:::
+
+::: {.column width="38%"}
+**What was done**
+
+- 
+
+**What was observed**
+
+- 
+
+**Why it matters**
+
+- 
+:::
+::::
+
+## Key result 3: [figure-level conclusion]
+
+:::: {.columns}
+::: {.column width="62%"}
+![](assets/key_result_3.png){fig-alt="Key result figure 3"}
+
+::: {.caption}
+From/Adapted from Author et al.
+:::
+:::
+
+::: {.column width="38%"}
+**What was done**
+
+- 
+
+**What was observed**
+
+- 
+
+**Why it matters**
+
+- 
+:::
+::::
+
+## The evidence supports [main claim] through [mechanism/validation]
+
+Use this slide to connect multiple figures.
+
+| Evidence | Supports | Confidence |
+|---|---|---|
+| Figure 1 |  | High / Medium / Low |
+| Figure 2 |  | High / Medium / Low |
+| Figure 3 |  | High / Medium / Low |
+
+# Critique
+
+## The paper is strongest where [strength]
+
+- Strong point 1:
+- Strong point 2:
+- Strong point 3:
+
+## The main uncertainty is [limitation]
+
+:::: {.columns}
+::: {.column width="50%"}
+**Limitations**
+
+- Data / structure coverage:
+- Method assumption:
+- Missing comparison:
+- Generalizability:
+:::
+
+::: {.column width="50%"}
+**What would make it stronger**
+
+- Additional calculation:
+- Additional benchmark:
+- Ablation / control:
+- Experimental validation:
+:::
+::::
+
+## Discussion questions
+
+1. Which evidence is most convincing, and why?
+2. Which assumption is most fragile?
+3. What result would change our interpretation of this paper?
+
+## Take-home message
+
+**One sentence**
+
+> Replace this with the final message people should remember after the discussion.
+
+**Three points**
+
+- 
+- 
+- 
+
+# Backup
+
+## Backup: extra computational settings
+
+Add full settings, hyperparameters, convergence tests, prompt details, or dataset information here.
+
+## Backup: additional figures
+
+Use backup slides for figures that are useful for questions but not essential to the main story.
+
