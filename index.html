@@ -7,13 +7,14 @@
   <style>
     /* =========================================================
        Paper Review Deck — figure-first, scroll-snap.
-       Anti-formula rule (Anthropic pptx skill): ROTATE the slide
-       TYPE every slide; never repeat the same structure twice in a
-       row. Types used: hero · overlay · statement · figure-hero ·
-       split · grid · critique · questions.
-       Patterns from Distill, assertion-evidence (Alley), academic
-       -pptx-skill: claim titles, on-figure annotation, one so-what,
-       cite the source figure, bookend conclusion.
+       HARD RULES:
+       - Text NEVER overlaps a figure. Figures stay 100% clean;
+         all explanation lives outside the figure (title / caption
+         below / text column). No boxes on top of data.
+       - word-break:keep-all so Korean wraps at spaces, never mid-word.
+       - Rotate slide TYPE every slide; no two consecutive alike.
+         Types: hero · figure-hero · statement · split · grid ·
+                critique · questions.
        ========================================================= */
     :root{
       --primary:#C2522D; --primary-2:#A8421F;
@@ -23,17 +24,20 @@
       --font:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR","Malgun Gothic",sans-serif;
       --fs-label:clamp(12px,.9vw,15px);
       --fs-title:clamp(27px,3vw,48px);
-      --fs-huge:clamp(40px,5.4vw,88px);
+      --fs-huge:clamp(38px,5.1vw,84px);
       --fs-lead:clamp(18px,1.7vw,27px);
       --fs-body:clamp(16px,1.4vw,22px);
-      --fs-anno:clamp(11px,1.02vw,15px);
-      --fs-cap:clamp(11px,.86vw,14px);
+      --fs-cap:clamp(12px,.98vw,16px);
       --px:clamp(36px,5.5vw,110px);
       --py:clamp(28px,4.2vh,64px);
     }
     *{box-sizing:border-box;}
     html{scroll-snap-type:y mandatory;scroll-behavior:smooth;background:var(--canvas);-webkit-text-size-adjust:100%;}
-    body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font);font-size:var(--fs-body);line-height:1.5;-webkit-font-smoothing:antialiased;}
+    body{
+      margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font);
+      font-size:var(--fs-body);line-height:1.5;-webkit-font-smoothing:antialiased;
+      word-break:keep-all;overflow-wrap:break-word;   /* Korean wraps at spaces only */
+    }
     h1,h2,h3,p{margin:0;} img{display:block;max-width:100%;} button{font:inherit;}
     em{font-style:normal;font-weight:750;color:var(--primary);}
     sub{font-size:.7em;}
@@ -45,96 +49,85 @@
     /* headings */
     .label{display:inline-flex;align-items:center;gap:10px;color:var(--primary);font-size:var(--fs-label);font-weight:800;letter-spacing:.14em;text-transform:uppercase;}
     .label::before{content:attr(data-step);display:grid;place-items:center;width:1.9em;height:1.9em;border:1.5px solid var(--primary);border-radius:50%;font-size:.82em;letter-spacing:0;}
-    .title{font-size:var(--fs-title);line-height:1.08;font-weight:730;letter-spacing:-.01em;text-wrap:balance;max-width:24ch;}
+    .title{font-size:var(--fs-title);line-height:1.12;font-weight:730;letter-spacing:-.01em;max-width:26ch;}
     .head{display:grid;gap:clamp(6px,1vh,12px);}
-    .subtitle{font-size:var(--fs-lead);line-height:1.36;color:var(--ink-muted);font-weight:500;max-width:40ch;}
+    .subtitle{font-size:var(--fs-lead);line-height:1.42;color:var(--ink-muted);font-weight:500;max-width:38ch;}
+    .subtitle em{color:var(--ink);font-weight:700;}
 
-    /* figure + annotations (shrink-wraps image so %-coords map exactly) */
+    /* clean figure (no overlays, ever) */
     .figwrap{min-height:0;display:grid;place-items:center;}
-    .figstage{position:relative;display:inline-block;line-height:0;max-width:100%;background:#fff;border:1px solid var(--border);border-radius:6px;box-shadow:0 1px 2px rgba(26,26,24,.05),0 18px 44px -26px rgba(26,26,24,.4);}
-    .figstage img{width:auto;height:auto;max-width:100%;max-height:var(--cap,64vh);border-radius:6px;}
-    .src{position:absolute;right:8px;bottom:6px;z-index:4;font-size:10px;line-height:1;color:var(--ink-muted);background:color-mix(in srgb,var(--canvas) 80%,transparent);padding:3px 6px;border-radius:5px;}
-    .anno{position:absolute;z-index:3;transform:translate(-50%,-50%);max-width:22ch;padding:6px 10px;border-radius:7px;background:var(--ink);color:#fff;font-size:var(--fs-anno);font-weight:600;line-height:1.28;box-shadow:0 6px 18px -8px rgba(0,0,0,.55);}
-    .anno.rust{background:var(--primary);} .anno.blue{background:var(--blue);}
-    .anno::after{content:"";position:absolute;width:11px;height:11px;border-radius:50%;background:inherit;box-shadow:0 0 0 3px color-mix(in srgb,var(--canvas) 70%,transparent);}
-    .anno[data-dir="d"]::after{bottom:-16px;left:50%;transform:translateX(-50%);}
-    .anno[data-dir="u"]::after{top:-16px;left:50%;transform:translateX(-50%);}
-    .anno[data-dir="l"]::after{left:-16px;top:50%;transform:translateY(-50%);}
-    .anno[data-dir="r"]::after{right:-16px;top:50%;transform:translateY(-50%);}
+    .figstage{display:inline-block;line-height:0;max-width:100%;background:#fff;border:1px solid var(--border);border-radius:6px;box-shadow:0 1px 2px rgba(26,26,24,.05),0 18px 44px -26px rgba(26,26,24,.4);}
+    .figstage img{width:auto;height:auto;max-width:100%;max-height:var(--cap,60vh);border-radius:6px;}
+    /* reading caption — sits BELOW the figure, never on it */
+    .figcap{font-size:var(--fs-cap);color:var(--ink-muted);line-height:1.45;max-width:96ch;}
+    .figcap b{color:var(--primary);font-weight:700;}
+    .figcap .cite{color:var(--ink-muted);opacity:.8;}
 
     /* so-what strip */
     .sowhat{display:flex;align-items:baseline;gap:clamp(12px,1.4vw,20px);border-top:2px solid var(--primary);padding-top:clamp(10px,1.4vh,16px);}
     .sowhat .tag{flex:0 0 auto;color:var(--primary);font-weight:800;font-size:var(--fs-label);letter-spacing:.12em;text-transform:uppercase;}
-    .sowhat p{font-size:var(--fs-lead);font-weight:640;line-height:1.3;}
+    .sowhat p{font-size:var(--fs-lead);font-weight:640;line-height:1.34;}
 
     /* ---- TYPE: hero ---- */
-    .l-hero{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(28px,3.4vw,64px);align-items:center;}
+    .l-hero{grid-template-columns:minmax(0,.84fr) minmax(0,1.16fr);gap:clamp(28px,3.4vw,64px);align-items:center;}
     .thesis{display:grid;gap:clamp(16px,2.2vh,30px);align-content:center;}
-    .thesis .title{font-size:var(--fs-huge);max-width:15ch;line-height:1.02;}
+    .thesis .title{font-size:var(--fs-huge);max-width:16ch;line-height:1.08;}
     .kicker{color:var(--primary);font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:var(--fs-label);}
     .meta{color:var(--ink-muted);font-size:var(--fs-cap);line-height:1.5;} .meta b{color:var(--ink);}
     .flip{display:inline-grid;grid-auto-flow:column;align-items:center;gap:12px;padding:12px 16px;background:var(--surface-1);border:1px solid var(--border);border-radius:8px;width:max-content;max-width:100%;}
     .flip .old{color:var(--ink-muted);text-decoration:line-through;text-decoration-color:var(--warm);font-weight:650;}
     .flip .to{color:var(--primary);font-weight:800;} .flip .new{color:var(--ink);font-weight:800;}
 
-    /* ---- TYPE: figure-hero (figure center, title above, so-what below) ---- */
+    /* ---- TYPE: figure-hero (title top · clean figure · caption+so-what below) ---- */
     .l-figure{grid-template-rows:auto minmax(0,1fr) auto;}
-    .l-figure .head,.l-figure .sowhat{align-self:start;}
+    .l-figure .head{align-self:start;}
+    .btm{display:grid;gap:clamp(8px,1.2vh,14px);align-self:end;}
 
-    /* ---- TYPE: overlay (headline + so-what float on the figure) ---- */
-    .l-overlay{grid-template-rows:minmax(0,1fr);}
-    .l-overlay .figstage{--cap:82vh;}
-    .l-overlay .ohead{position:absolute;top:18px;left:18px;z-index:6;max-width:min(46ch,58%);background:var(--canvas);border:1px solid var(--border);border-radius:12px;padding:16px 20px;box-shadow:0 14px 40px -16px rgba(26,26,24,.4);display:grid;gap:8px;}
-    .l-overlay .oso{position:absolute;right:18px;bottom:18px;z-index:6;max-width:min(40ch,52%);background:var(--ink);color:var(--canvas);border-radius:12px;padding:14px 18px;box-shadow:0 14px 40px -16px rgba(26,26,24,.5);line-height:0;}
-    .l-overlay .oso span{display:block;line-height:0;} .l-overlay .oso b{color:var(--warm);font-size:var(--fs-label);letter-spacing:.1em;text-transform:uppercase;line-height:1;}
-    .l-overlay .oso p{line-height:1.3;font-size:var(--fs-body);font-weight:600;margin-top:6px;}
-
-    /* ---- TYPE: statement (huge claim, no big figure) ---- */
+    /* ---- TYPE: statement (huge claim, no figure) ---- */
     .l-statement{align-content:center;gap:clamp(18px,2.6vh,34px);}
-    .statement{font-size:var(--fs-huge);font-weight:760;line-height:1.03;letter-spacing:-.02em;max-width:15ch;text-wrap:balance;}
+    .statement{font-size:var(--fs-huge);font-weight:760;line-height:1.1;letter-spacing:-.02em;max-width:18ch;}
     .statement em{color:var(--primary);}
-    .substatement{font-size:var(--fs-lead);color:var(--ink-muted);max-width:44ch;line-height:1.4;font-weight:500;}
+    .substatement{font-size:var(--fs-lead);color:var(--ink-muted);max-width:42ch;line-height:1.45;font-weight:500;}
+    .substatement em{color:var(--ink);font-weight:700;}
     .oldcue{display:inline-flex;gap:10px;align-items:center;padding:10px 16px;border-left:4px solid var(--warm);background:var(--surface-1);border-radius:0 8px 8px 0;font-size:var(--fs-body);font-weight:560;color:var(--ink-muted);width:max-content;max-width:100%;}
 
     /* ---- TYPE: split ---- */
-    .l-split{grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:clamp(26px,3vw,54px);align-items:center;}
-    .l-split.rev{grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);}
+    .l-split{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:clamp(26px,3.2vw,56px);align-items:center;}
+    .l-split.rev{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);}
+    .l-split .txt{display:grid;gap:clamp(10px,1.6vh,18px);align-content:center;}
+    .l-split .cite{font-size:var(--fs-cap);color:var(--ink-muted);opacity:.85;}
 
     /* ---- TYPE: grid (evidence tiles) ---- */
     .l-grid{grid-template-rows:auto minmax(0,1fr) auto;}
-    .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.6vw,24px);align-items:stretch;}
+    .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.6vw,24px);align-items:stretch;align-self:center;}
     .tile{display:grid;gap:10px;align-content:start;padding:clamp(18px,1.8vw,28px);background:var(--surface-1);border-radius:12px;border-top:5px solid var(--primary);}
     .tile:nth-child(3){border-top-color:var(--warm);}
     .tile .k{font-size:var(--fs-label);letter-spacing:.08em;text-transform:uppercase;color:var(--primary);font-weight:800;}
     .tile:nth-child(3) .k{color:color-mix(in srgb,var(--warm) 80%,var(--ink));}
-    .tile .v{font-size:clamp(18px,1.7vw,26px);font-weight:640;line-height:1.26;}
+    .tile .v{font-size:clamp(18px,1.6vw,25px);font-weight:600;line-height:1.34;}
 
     /* ---- TYPE: critique ---- */
     .l-crit{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(26px,3vw,54px);align-items:center;}
-    .verdict{font-size:clamp(22px,2.4vw,38px);font-weight:720;line-height:1.18;letter-spacing:-.01em;text-wrap:balance;}
+    .verdict{font-size:clamp(22px,2.4vw,38px);font-weight:720;line-height:1.24;letter-spacing:-.01em;}
     .risks{display:grid;gap:14px;}
     .risk{display:grid;gap:5px;padding:16px 18px;background:var(--surface-1);border-left:4px solid var(--warm);border-radius:0 6px 6px 0;}
     .risk b{font-size:var(--fs-label);letter-spacing:.06em;text-transform:uppercase;color:color-mix(in srgb,var(--warm) 80%,var(--ink));}
-    .risk span{font-size:var(--fs-body);line-height:1.34;font-weight:520;}
+    .risk span{font-size:var(--fs-body);line-height:1.4;font-weight:520;}
 
     /* ---- TYPE: questions ---- */
     .qs{display:grid;gap:clamp(14px,2vh,26px);align-content:center;}
     .q{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(16px,1.6vw,26px);align-items:baseline;}
     .q b{color:var(--primary);font-size:clamp(20px,2vw,30px);font-weight:800;font-variant-numeric:tabular-nums;}
-    .q span{font-size:clamp(18px,1.7vw,27px);line-height:1.3;font-weight:560;}
-    .bookend{padding:16px 20px;background:var(--ink);color:var(--canvas);border-radius:10px;font-size:var(--fs-lead);font-weight:640;line-height:1.34;}
+    .q span{font-size:clamp(18px,1.7vw,27px);line-height:1.36;font-weight:560;}
+    .bookend{padding:16px 20px;background:var(--ink);color:var(--canvas);border-radius:10px;font-size:var(--fs-lead);font-weight:640;line-height:1.4;}
     .bookend em{color:var(--warm);}
     .refs{font-size:var(--fs-cap);color:var(--ink-muted);}
-
-    .foot{display:flex;justify-content:space-between;align-items:center;gap:16px;color:var(--ink-muted);font-size:var(--fs-cap);}
-    .foot .rule{width:clamp(40px,5vw,80px);height:2px;background:var(--primary);}
 
     @keyframes rise{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
     @media (prefers-reduced-motion:no-preference){
       .slide.on .inner>*{animation:rise .55s ease both;}
       .slide.on .inner>*:nth-child(2){animation-delay:.06s;}
       .slide.on .inner>*:nth-child(3){animation-delay:.12s;}
-      .slide.on .anno,.slide.on .ohead,.slide.on .oso{animation:rise .5s ease both .22s;}
     }
 
     .hud{position:fixed;z-index:30;right:clamp(16px,2vw,30px);bottom:clamp(14px,2.2vh,26px);display:flex;align-items:center;gap:11px;}
@@ -157,36 +150,33 @@
       <div class="thesis">
         <span class="kicker">Journal Club · ORR SAC</span>
         <h1 class="title">약하게 붙는 촉매가 왜 더 잘 작동할까?</h1>
-        <p class="subtitle">정설(volcano)은 이 예외를 설명 못한다. <em>그래서</em> 질문을 바꾼다 — “얼마나 세게”가 아니라 “<em>어디에</em>” 붙나.</p>
+        <p class="subtitle">정설(volcano)은 이 예외를 설명하지 못한다. <em>그래서</em> 질문을 바꾼다 — “얼마나 세게”가 아니라 “<em>어디에</em>” 붙나.</p>
         <div class="flip"><span class="old">metal 위 (atop)</span><span class="to">→</span><span class="new">M–N 다리 (bridge)</span></div>
         <p class="meta"><b>Zhang et al., JACS 2025</b> · Why Do Weak-Binding M–N–C Single-Atom Catalysts Possess Anomalously High Oxygen Reduction Activity?</p>
       </div>
       <div class="figwrap">
-        <figure class="figstage" style="--cap:70vh">
-          <img src="assets/zhang2025_fig2_bridge_scaling.png" alt="Atop vs bridge motif, site map, and scaling">
-          <span class="anno rust" data-dir="d" style="top:47%;left:14%">atop vs bridge: 같은 자리, 다른 위치</span>
-          <span class="anno" data-dir="l" style="top:20%;left:74%">이 site 지도가 논문의 씨앗</span>
-          <span class="src">Zhang 2025 · Fig 2</span>
+        <figure class="figstage" style="--cap:72vh">
+          <img src="assets/zhang2025_fig2_bridge_scaling.png" alt="Atop vs bridge motif, site map, and scaling relations">
         </figure>
       </div>
     </div>
   </section>
 
-  <!-- 2 · OVERLAY (problem) -->
+  <!-- 2 · FIGURE-HERO (problem) -->
   <section class="slide" aria-label="Problem">
-    <div class="inner l-overlay">
+    <div class="inner l-figure">
+      <div class="head">
+        <span class="label" data-step="02">The Anomaly</span>
+        <h2 class="title">약결합 Ni·Cu·Zn이 활성을 잃지 않는다.</h2>
+      </div>
       <div class="figwrap">
-        <figure class="figstage">
-          <img src="assets/zhang2025_fig1_problem.png" alt="Activity across metals, alkaline vs acidic">
-          <div class="ohead">
-            <span class="label" data-step="02">The Anomaly</span>
-            <h2 class="title" style="font-size:var(--fs-title)">약결합 Ni·Cu·Zn이 활성을 잃지 않는다.</h2>
-          </div>
-          <span class="anno blue" data-dir="u" style="top:60%;left:52%">weak-binding인데 활성이 높다</span>
-          <span class="anno" data-dir="l" style="top:82%;left:30%">보라 점선 = moderate↔weak 경계</span>
-          <div class="oso"><span><b>그래서</b><p>결합 세기만으로 활성이 안 갈리면, <em>descriptor가 무언가를 놓친다</em>.</p></span></div>
-          <span class="src">Zhang 2025 · Fig 1</span>
+        <figure class="figstage" style="--cap:56vh">
+          <img src="assets/zhang2025_fig1_problem.png" alt="Half-wave and onset potential across metals, alkaline vs acidic">
         </figure>
+      </div>
+      <div class="btm">
+        <p class="figcap"><b>읽는 법 —</b> 각 패널의 보라 점선 오른쪽이 weak-binding(Ni·Cu·Zn). alkaline에서 이들도 높은 half-wave·onset 전위를 유지한다. <span class="cite">Zhang 2025, Fig 1</span></p>
+        <div class="sowhat"><span class="tag">그래서</span><p>결합 세기만으로 활성이 안 갈리면, <em>descriptor가 무언가를 놓친다</em>.</p></div>
       </div>
     </div>
   </section>
@@ -201,58 +191,55 @@
     </div>
   </section>
 
-  <!-- 4 · FIGURE-HERO (new idea) -->
+  <!-- 4 · SPLIT (new idea) -->
   <section class="slide" aria-label="New idea">
-    <div class="inner l-figure">
-      <div class="head">
-        <span class="label" data-step="04">The Move</span>
-        <h2 class="title">O*가 M–N 다리로 옮겨가면, N도 활성 자리가 된다.</h2>
-      </div>
+    <div class="inner l-split rev">
       <div class="figwrap">
-        <figure class="figstage" style="--cap:58vh">
-          <img src="assets/zhang2025_fig2_bridge_scaling.png" alt="Bridge site preference map">
-          <span class="anno rust" data-dir="d" style="top:47%;left:14%">bridge = O*가 금속–N 사이</span>
-          <span class="anno blue" data-dir="l" style="top:33%;left:73%">✕ = bridge를 선호하는 site</span>
-          <span class="src">Zhang 2025 · Fig 2</span>
+        <figure class="figstage" style="--cap:74vh">
+          <img src="assets/zhang2025_fig2_bridge_scaling.png" alt="Bridge adsorption geometry and site-preference map">
         </figure>
       </div>
-      <div class="sowhat"><span class="tag">그래서</span><p>활성 자리는 금속 원자 하나가 아니라 <em>M–N 앙상블</em>이다.</p></div>
+      <div class="txt">
+        <span class="label" data-step="04">The Move</span>
+        <h2 class="title">O*가 M–N 다리로 옮겨가면, N도 활성 자리가 된다.</h2>
+        <p class="subtitle">패널 a는 atop(금속 위)와 bridge(금속–N 사이) 구조를, 패널 c의 ✕는 bridge를 선호하는 site를 보여준다. <em>활성 자리는 금속 하나가 아니라 M–N 앙상블이다.</em></p>
+        <p class="cite">Zhang 2025, Fig 2 (a, c)</p>
+      </div>
     </div>
   </section>
 
-  <!-- 5 · SPLIT (scaling) -->
+  <!-- 5 · FIGURE-HERO (scaling) -->
   <section class="slide" aria-label="Scaling">
-    <div class="inner l-split">
-      <div class="figwrap">
-        <figure class="figstage" style="--cap:70vh">
-          <img src="assets/zhang2025_fig2_bridge_scaling.png" alt="Scaling relations atop vs bridge">
-          <span class="anno" data-dir="u" style="top:69%;left:22%">atop 기울기 1.79</span>
-          <span class="anno rust" data-dir="u" style="top:87%;left:27%">bridge 1.36 → 완만</span>
-          <span class="src">Zhang 2025 · Fig 2d</span>
-        </figure>
-      </div>
+    <div class="inner l-figure">
       <div class="head">
         <span class="label" data-step="05">Why It Works</span>
         <h2 class="title">기하가 scaling 관계를 바꾼다.</h2>
-        <p class="subtitle">bridge는 E<sub>O*</sub>–E<sub>HO*</sub> 기울기를 낮춰(1.79→1.36) weak-binding penalty를 줄인다. <em>즉</em> descriptor가 위치에 의존한다.</p>
+      </div>
+      <div class="figwrap">
+        <figure class="figstage" style="--cap:56vh">
+          <img src="assets/zhang2025_fig2_bridge_scaling.png" alt="Scaling relations for atop and bridge O adsorption">
+        </figure>
+      </div>
+      <div class="btm">
+        <p class="figcap"><b>패널 d —</b> atop 기울기 1.79 vs bridge 1.36. bridge가 E<sub>O*</sub>–E<sub>HO*</sub> 기울기를 낮춰 weak-binding penalty를 줄인다. <span class="cite">Zhang 2025, Fig 2d</span></p>
+        <div class="sowhat"><span class="tag">그래서</span><p>descriptor가 결합 세기가 아니라 <em>위치에 의존</em>한다.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- 6 · OVERLAY (interface) -->
+  <!-- 6 · SPLIT (interface) -->
   <section class="slide" aria-label="Interface">
-    <div class="inner l-overlay">
+    <div class="inner l-split">
       <div class="figwrap">
-        <figure class="figstage">
-          <img src="assets/zhang2025_fig3_field_solvation.png" alt="Field and solvation response">
-          <div class="ohead">
-            <span class="label" data-step="06">Not Just Energy</span>
-            <h2 class="title" style="font-size:var(--fs-title)">위치가 field·용매 반응까지 바꾼다.</h2>
-          </div>
-          <span class="anno rust" data-dir="l" style="top:20%;left:49%">atop·bridge가 전기장에 다르게 반응</span>
-          <div class="oso"><span><b>그래서</b><p>field·solvation은 보정이 아니라 <em>메커니즘의 일부</em>다.</p></span></div>
-          <span class="src">Zhang 2025 · Fig 3</span>
+        <figure class="figstage" style="--cap:74vh">
+          <img src="assets/zhang2025_fig3_field_solvation.png" alt="Electric-field and solvation response for atop vs bridge">
         </figure>
+      </div>
+      <div class="txt">
+        <span class="label" data-step="06">Not Just Energy</span>
+        <h2 class="title">위치가 field·용매 반응까지 바꾼다.</h2>
+        <p class="subtitle">atop과 bridge는 전기장과 용매 안정화에 서로 다르게 반응한다. <em>field·solvation은 보정이 아니라 메커니즘의 일부다.</em></p>
+        <p class="cite">Zhang 2025, Fig 3</p>
       </div>
     </div>
   </section>
@@ -265,14 +252,14 @@
         <h2 class="title">bridge 경로는 volcano 정점을 weak-binding 쪽으로 민다.</h2>
       </div>
       <div class="figwrap">
-        <figure class="figstage" style="--cap:56vh">
-          <img src="assets/zhang2025_fig4_volcano_clean.png" alt="Atop vs bridge activity volcanoes">
-          <span class="anno blue" data-dir="d" style="top:11%;left:19%">atop: 정점이 강결합 쪽 → 약결합 탈락</span>
-          <span class="anno rust" data-dir="d" style="top:11%;left:70%">bridge: 정점 오른쪽 이동 → Cu 활성화</span>
-          <span class="src">Zhang 2025 · Fig 4</span>
+        <figure class="figstage" style="--cap:54vh">
+          <img src="assets/zhang2025_fig4_volcano_clean.png" alt="Atop vs bridge pH-dependent activity volcanoes">
         </figure>
       </div>
-      <div class="sowhat"><span class="tag">그래서</span><p>site 기하가 곧 <em>kinetic descriptor</em>로 작동한다 — anomaly가 예측 안으로 들어온다.</p></div>
+      <div class="btm">
+        <p class="figcap"><b>읽는 법 —</b> 왼쪽 atop은 정점이 강결합 쪽이라 약결합 금속이 탈락한다. 오른쪽 bridge는 정점이 오른쪽으로 이동해 Cu가 활성 구간으로 들어온다. <span class="cite">Zhang 2025, Fig 4</span></p>
+        <div class="sowhat"><span class="tag">그래서</span><p>site 기하가 곧 <em>kinetic descriptor</em>로 작동한다 — anomaly가 예측 안으로 들어온다.</p></div>
+      </div>
     </div>
   </section>
 
@@ -288,7 +275,7 @@
         <div class="tile"><span class="k">Spectroscopy</span><span class="v">N K-edge XAS·N 1s XPS가 <em>N–O 관여</em>를 시사한다.</span></div>
         <div class="tile"><span class="k">Caveat</span><span class="v">단, interface <em>동역학은 직접</em> 관찰되지 않았다.</span></div>
       </div>
-      <div class="sowhat"><span class="tag">그래서</span><p>정황은 강하게 수렴하지만, 결정적 한 방은 아직 <em>정황 증거</em>다. <span class="refs" style="margin-left:8px">(Zhang 2025 · Fig 5–6)</span></p></div>
+      <div class="sowhat"><span class="tag">그래서</span><p>정황은 강하게 수렴하지만, 결정적 한 방은 아직 <em>정황 증거</em>다. <span class="refs">(Zhang 2025, Fig 5–6)</span></p></div>
     </div>
   </section>
 
@@ -300,7 +287,7 @@
         <p class="verdict">설득력 있는 재해석이다. 다만 결론을 떠받치는 가장 약한 고리는 <em>electrochemical interface 모델</em>이다.</p>
       </div>
       <div class="risks">
-        <div class="risk"><b>Static DFT</b><span>유한 온도 전해질에서 bridge O*가 실제 접근 가능한지 직접 sampling되지 않았다.</span></div>
+        <div class="risk"><b>Static DFT</b><span>유한 온도 전해질에서 bridge O*가 실제로 접근 가능한지 직접 sampling되지 않았다.</span></div>
         <div class="risk"><b>Interface 가정</b><span>field mapping·solvation·capacitance 선택이 pH 의존 kinetic 예측을 흔들 수 있다.</span></div>
         <div class="risk"><b>Model ↔ real gap</b><span>molecular model 촉매는 명료하지만, 실제 SAC site는 더 무질서하다.</span></div>
       </div>
