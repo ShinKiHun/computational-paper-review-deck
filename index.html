@@ -6,626 +6,368 @@
   <title>Zhang et al. 2025 · ORR Single-Atom Catalyst Review</title>
   <style>
     /* =========================================================
-       Computational Paper Review Deck — gold reference template
-       Scroll-snap deck. Each <section class="slide"> is one full
-       viewport that snaps into place on wheel / trackpad / arrows.
-       To reuse: keep this CSS + JS, replace slide content + figures.
+       Paper Review Deck — figure-first, annotated, scroll-snap.
+       Design principles borrowed from Distill, assertion-evidence
+       (Alley), Ciechanowski, reveal.js:
+         - the FIGURE is the protagonist (large, annotated on top)
+         - title = a claim; subtitle = one ABT sentence
+         - no cue lists; a single "그래서(so-what)" line per slide
+         - varied layouts; hook -> argument -> critique -> discussion
        ========================================================= */
-
     :root {
-      --primary: #C2522D;
-      --primary-hover: #A8421F;
-      --ink: #1A1A18;
-      --ink-muted: #6B6B63;
-      --canvas: #FAF9F7;
-      --surface-1: #F2F0EC;
-      --surface-2: #E8E5E0;
-      --border: #D8D4CC;
-      --accent-warm: #D4A574;
-
-      --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-                   "Segoe UI", "Noto Sans KR", "Malgun Gothic", sans-serif;
-
-      /* fluid type — scales with viewport so it reads on any projector */
-      --fs-label: clamp(12px, 0.95vw, 15px);
-      --fs-title: clamp(30px, 3.4vw, 54px);
-      --fs-title-lg: clamp(36px, 4.1vw, 64px);
-      --fs-body: clamp(17px, 1.55vw, 25px);
-      --fs-lead: clamp(19px, 1.8vw, 28px);
-      --fs-caption: clamp(12px, 0.95vw, 16px);
-
-      --pad-x: clamp(40px, 6vw, 120px);
-      --pad-y: clamp(36px, 5vh, 84px);
-      --gap: clamp(24px, 3vw, 56px);
+      --primary:#C2522D; --primary-2:#A8421F;
+      --ink:#1A1A18; --ink-muted:#6B6B63;
+      --canvas:#FAF9F7; --surface-1:#F2F0EC; --surface-2:#E8E5E0;
+      --border:#D8D4CC; --warm:#D4A574;
+      --blue:#5A6E8C;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", "Malgun Gothic", sans-serif;
+      --fs-label: clamp(12px,.9vw,15px);
+      --fs-title: clamp(28px,3.1vw,50px);
+      --fs-title-lg: clamp(34px,4vw,62px);
+      --fs-lead: clamp(18px,1.7vw,27px);
+      --fs-body: clamp(16px,1.4vw,22px);
+      --fs-anno: clamp(11px,1.02vw,15px);
+      --fs-cap: clamp(11px,.9vw,15px);
+      --px: clamp(36px,5.5vw,110px);
+      --py: clamp(30px,4.4vh,70px);
     }
+    * { box-sizing:border-box; }
+    html { scroll-snap-type:y mandatory; scroll-behavior:smooth; background:var(--canvas); -webkit-text-size-adjust:100%; }
+    body { margin:0; background:var(--canvas); color:var(--ink); font-family:var(--font); font-size:var(--fs-body); line-height:1.5; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3,p { margin:0; }
+    img { display:block; max-width:100%; }
+    button { font:inherit; }
+    em { font-style:normal; font-weight:750; color:var(--primary); }
 
-    * { box-sizing: border-box; }
-
-    html {
-      scroll-snap-type: y mandatory;
-      scroll-behavior: smooth;
-      background: var(--canvas);
-      -webkit-text-size-adjust: 100%;
-    }
-
-    body {
-      margin: 0;
-      background: var(--canvas);
-      color: var(--ink);
-      font-family: var(--font-sans);
-      font-size: var(--fs-body);
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    img { display: block; max-width: 100%; }
-    h1, h2, h3, p { margin: 0; }
-    button { font: inherit; }
-
-    /* ---------- slide shell ---------- */
     .slide {
-      position: relative;
-      min-height: 100vh;
-      scroll-snap-align: start;
-      scroll-snap-stop: always;
-      display: grid;
-      place-items: center;
-      padding: var(--pad-y) var(--pad-x);
-      border-bottom: 1px solid color-mix(in srgb, var(--border) 55%, transparent);
+      position:relative; min-height:100vh; scroll-snap-align:start; scroll-snap-stop:always;
+      display:grid; place-items:center; padding:var(--py) var(--px);
+      border-bottom:1px solid color-mix(in srgb,var(--border) 50%,transparent);
+    }
+    .inner {
+      width:min(1500px,100%); max-height:calc(100vh - 2*var(--py));
+      display:grid; gap:clamp(14px,2vh,30px);
     }
 
-    .slide__inner {
-      width: min(1440px, 100%);
-      max-height: calc(100vh - 2 * var(--pad-y));
-      display: grid;
-      grid-template-rows: auto minmax(0, 1fr) auto;
-      gap: clamp(18px, 2.4vh, 40px);
+    /* ---- header ---- */
+    .label { display:inline-flex; align-items:center; gap:10px; color:var(--primary);
+      font-size:var(--fs-label); font-weight:800; letter-spacing:.14em; text-transform:uppercase; }
+    .label::before { content:attr(data-step); display:grid; place-items:center; width:1.9em; height:1.9em;
+      border:1.5px solid var(--primary); border-radius:50%; font-size:.82em; letter-spacing:0; }
+    .title { font-size:var(--fs-title); line-height:1.08; font-weight:730; letter-spacing:-.01em; text-wrap:balance; max-width:24ch; }
+    .title.lg { font-size:var(--fs-title-lg); max-width:17ch; }
+    .subtitle { margin-top:.5em; font-size:var(--fs-lead); line-height:1.36; color:var(--ink-muted); font-weight:500; max-width:40ch; }
+    .head { display:grid; gap:clamp(6px,1vh,12px); }
+
+    /* ---- figure + annotations (the core upgrade) ---- */
+    .figwrap { min-height:0; display:grid; place-items:center; }
+    /* figstage shrink-wraps the image exactly, so annotation %-coords map to the image
+       in every layout (no aspect-ratio math, no letterboxing). */
+    .figstage {
+      position:relative; display:inline-block; line-height:0; max-width:100%;
+      background:#fff; border:1px solid var(--border); border-radius:6px;
+      box-shadow:0 1px 2px rgba(26,26,24,.05),0 18px 44px -26px rgba(26,26,24,.4);
+    }
+    .figstage img { width:auto; height:auto; max-width:100%; max-height:64vh; border-radius:6px; }
+    /* annotation chip pinned to a % coordinate on the figure */
+    .anno {
+      position:absolute; z-index:3; transform:translate(-50%,-50%);
+      max-width:22ch; padding:6px 10px; border-radius:7px;
+      background:var(--ink); color:#fff; font-size:var(--fs-anno); font-weight:600; line-height:1.28;
+      box-shadow:0 6px 18px -8px rgba(0,0,0,.55);
+    }
+    .anno.rust { background:var(--primary); }
+    .anno.blue { background:var(--blue); }
+    .anno::after { /* pointer dot */
+      content:""; position:absolute; width:11px; height:11px; border-radius:50%;
+      background:inherit; box-shadow:0 0 0 3px color-mix(in srgb,var(--canvas) 70%,transparent);
+    }
+    .anno[data-dir="d"]::after { bottom:-16px; left:50%; transform:translateX(-50%); }
+    .anno[data-dir="u"]::after { top:-16px; left:50%; transform:translateX(-50%); }
+    .anno[data-dir="l"]::after { left:-16px; top:50%; transform:translateY(-50%); }
+    .anno[data-dir="r"]::after { right:-16px; top:50%; transform:translateY(-50%); }
+    .cap { margin-top:2px; font-size:var(--fs-cap); color:var(--ink-muted); line-height:1.4; }
+
+    /* ---- "so what" takeaway strip ---- */
+    .sowhat { display:flex; align-items:baseline; gap:clamp(12px,1.4vw,20px); border-top:2px solid var(--primary); padding-top:clamp(10px,1.4vh,16px); }
+    .sowhat .tag { flex:0 0 auto; color:var(--primary); font-weight:800; font-size:var(--fs-label); letter-spacing:.12em; text-transform:uppercase; }
+    .sowhat p { font-size:var(--fs-lead); font-weight:640; line-height:1.3; }
+
+    /* ---- layouts ---- */
+    .l-hero { grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr); gap:clamp(28px,3.4vw,64px); align-items:center; }
+    .l-figure { grid-template-rows:auto minmax(0,1fr) auto; }
+    .l-split { grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr); gap:clamp(26px,3vw,54px); align-items:center; }
+    .l-split.rev { grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr); }
+    .l-figure .head, .l-figure .sowhat { align-self:start; }
+
+    /* hero thesis */
+    .thesis { display:grid; gap:clamp(16px,2.2vh,30px); align-content:center; }
+    .kicker { color:var(--primary); font-weight:800; letter-spacing:.14em; text-transform:uppercase; font-size:var(--fs-label); }
+    .meta { color:var(--ink-muted); font-size:var(--fs-cap); line-height:1.5; }
+    .meta b { color:var(--ink); }
+    .flip { display:inline-grid; grid-auto-flow:column; align-items:center; gap:12px; padding:12px 16px; background:var(--surface-1); border:1px solid var(--border); border-radius:8px; width:max-content; }
+    .flip .old { color:var(--ink-muted); text-decoration:line-through; text-decoration-color:var(--warm); font-weight:650; }
+    .flip .to { color:var(--primary); font-weight:800; }
+    .flip .new { color:var(--ink); font-weight:800; }
+
+    /* critique */
+    .l-crit { grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); gap:clamp(26px,3vw,54px); align-items:center; }
+    .verdict { font-size:clamp(22px,2.4vw,38px); font-weight:720; line-height:1.18; letter-spacing:-.01em; text-wrap:balance; }
+    .risks { display:grid; gap:14px; }
+    .risk { display:grid; gap:5px; padding:16px 18px; background:var(--surface-1); border-left:4px solid var(--warm); border-radius:0 6px 6px 0; }
+    .risk b { font-size:var(--fs-label); letter-spacing:.06em; text-transform:uppercase; color:color-mix(in srgb,var(--warm) 80%,var(--ink)); }
+    .risk span { font-size:var(--fs-body); line-height:1.34; font-weight:520; }
+
+    /* discussion questions */
+    .qs { display:grid; gap:clamp(14px,2vh,26px); align-content:center; }
+    .q { display:grid; grid-template-columns:auto minmax(0,1fr); gap:clamp(16px,1.6vw,26px); align-items:baseline; }
+    .q b { color:var(--primary); font-size:clamp(20px,2vw,30px); font-weight:800; font-variant-numeric:tabular-nums; }
+    .q span { font-size:clamp(18px,1.7vw,27px); line-height:1.3; font-weight:560; }
+    .bookend { padding:16px 20px; background:var(--ink); color:var(--canvas); border-radius:10px; font-size:var(--fs-lead); font-weight:640; line-height:1.34; }
+    .bookend em { color:var(--warm); }
+
+    .foot { display:flex; justify-content:space-between; align-items:center; gap:16px; color:var(--ink-muted); font-size:var(--fs-cap); }
+    .foot .rule { width:clamp(40px,5vw,80px); height:2px; background:var(--primary); }
+
+    /* entrance — additive only; content always visible if JS/IO fail */
+    @keyframes rise { from{opacity:0; transform:translateY(16px);} to{opacity:1; transform:none;} }
+    @media (prefers-reduced-motion:no-preference){
+      .slide.on .inner > * { animation:rise .55s ease both; }
+      .slide.on .inner > *:nth-child(2){ animation-delay:.06s; }
+      .slide.on .inner > *:nth-child(3){ animation-delay:.12s; }
+      .slide.on .anno { animation:rise .5s ease both .25s; }
     }
 
-    /* ---------- header ---------- */
-    .head {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: var(--gap);
-      align-items: start;
-    }
+    /* fixed UI */
+    .hud { position:fixed; z-index:30; right:clamp(16px,2vw,30px); bottom:clamp(14px,2.2vh,26px); display:flex; align-items:center; gap:11px; }
+    .counter { font-variant-numeric:tabular-nums; color:var(--ink-muted); font-size:var(--fs-cap); font-weight:650; }
+    .counter b { color:var(--ink); font-weight:850; }
+    .nb { width:36px; height:36px; display:grid; place-items:center; border:1px solid var(--border); border-radius:50%; background:#fff; color:var(--ink-muted); cursor:pointer; font-size:19px; transition:.15s; }
+    .nb:hover { color:var(--primary); border-color:var(--primary); }
+    .nb:disabled { opacity:.3; cursor:default; }
+    .rail { position:fixed; z-index:30; right:clamp(13px,1.5vw,24px); top:50%; transform:translateY(-50%); display:grid; gap:9px; }
+    .rail button { width:9px; height:9px; padding:0; border:0; border-radius:50%; background:var(--border); cursor:pointer; transition:.2s; }
+    .rail button:hover { background:var(--ink-muted); }
+    .rail button[aria-current="true"] { background:var(--primary); transform:scale(1.4); }
+    @media (max-width:820px){ .rail{display:none;} .l-hero,.l-split,.l-split.rev,.l-crit{grid-template-columns:1fr;} }
 
-    .label {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: clamp(10px, 1.4vh, 18px);
-      color: var(--primary);
-      font-size: var(--fs-label);
-      font-weight: 800;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-    }
-    .label::before {
-      content: attr(data-step);
-      display: grid;
-      place-items: center;
-      width: 1.9em; height: 1.9em;
-      border: 1.5px solid var(--primary);
-      border-radius: 50%;
-      font-size: 0.82em;
-      letter-spacing: 0;
-    }
-
-    .title {
-      max-width: 20ch;
-      font-size: var(--fs-title);
-      line-height: 1.06;
-      font-weight: 720;
-      letter-spacing: -0.01em;
-      text-wrap: balance;
-    }
-    .title.lg { max-width: 16ch; font-size: var(--fs-title-lg); }
-    .title.wide { max-width: 26ch; }
-
-    .paper-meta {
-      max-width: 34ch;
-      color: var(--ink-muted);
-      font-size: var(--fs-caption);
-      line-height: 1.5;
-      text-align: right;
-    }
-    .paper-meta strong { color: var(--ink); font-weight: 700; }
-
-    /* ---------- body layouts ---------- */
-    .body { min-height: 0; display: grid; gap: var(--gap); align-items: stretch; }
-
-    .layout-split-l { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); }
-    .layout-split-r { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); }
-    .layout-figure  { grid-template-columns: 1fr; }
-    .layout-hero    { grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr); align-items: center; }
-    .layout-compare { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-
-    /* ---------- figure panel ---------- */
-    .figure {
-      min-height: 0;
-      display: grid;
-      grid-template-rows: minmax(0, 1fr) auto;
-      gap: 12px;
-      padding: clamp(14px, 1.4vw, 22px);
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      box-shadow: 0 1px 2px rgba(26,26,24,0.04), 0 12px 32px -20px rgba(26,26,24,0.28);
-    }
-    .figure.paper { background: var(--surface-1); }
-    .figure img {
-      width: 100%; height: 100%; min-height: 0;
-      object-fit: contain;
-    }
-    .caption {
-      color: var(--ink-muted);
-      font-size: var(--fs-caption);
-      line-height: 1.45;
-    }
-    .caption b { color: var(--primary); font-weight: 700; }
-
-    /* ---------- evidence cues ---------- */
-    .evidence { align-self: center; display: grid; gap: clamp(12px, 1.6vh, 20px); }
-    .cue {
-      display: grid; gap: 7px;
-      padding: clamp(14px, 1.5vw, 22px) clamp(16px, 1.6vw, 24px);
-      background: var(--surface-1);
-      border-left: 4px solid var(--primary);
-      border-radius: 0 4px 4px 0;
-    }
-    .cue.warm { border-left-color: var(--accent-warm); background: color-mix(in srgb, var(--surface-1) 65%, #fff); }
-    .cue b {
-      color: var(--primary); font-size: var(--fs-label);
-      font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
-    }
-    .cue.warm b { color: color-mix(in srgb, var(--accent-warm) 78%, var(--ink)); }
-    .cue span { color: var(--ink); font-size: var(--fs-body); line-height: 1.34; font-weight: 500; }
-    .cue span em { color: var(--primary); font-style: normal; font-weight: 700; }
-
-    /* ---------- title-slide thesis block ---------- */
-    .thesis { align-self: center; display: grid; gap: clamp(18px, 2.6vh, 34px); }
-    .lead { max-width: 24ch; color: var(--ink-muted); font-size: var(--fs-lead); line-height: 1.4; font-weight: 500; }
-    .lead em { color: var(--ink); font-style: normal; font-weight: 700; }
-    .bridge { display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: stretch; }
-    .site {
-      display: grid; gap: 6px; align-content: center;
-      padding: clamp(16px, 1.6vw, 24px); background: var(--surface-1);
-      border: 1px solid var(--border); border-radius: 4px;
-    }
-    .site.new { background: #fff; border-top: 4px solid var(--primary); }
-    .site.old { border-top: 4px solid var(--accent-warm); }
-    .site b { color: var(--ink-muted); font-size: var(--fs-label); letter-spacing: 0.08em; text-transform: uppercase; }
-    .site span { color: var(--ink); font-size: clamp(20px, 2.1vw, 30px); font-weight: 720; line-height: 1.1; }
-    .arrow { align-self: center; color: var(--primary); font-size: clamp(24px, 2.4vw, 34px); font-weight: 600; }
-    .tags { display: flex; flex-wrap: wrap; gap: 9px; }
-    .tags span {
-      padding: 7px 12px; background: var(--surface-1); border: 1px solid var(--border);
-      border-radius: 999px; color: var(--ink-muted); font-size: var(--fs-caption); font-weight: 650;
-    }
-
-    /* ---------- compare blocks ---------- */
-    .compare {
-      display: grid; grid-template-rows: auto 1fr; gap: 14px;
-      padding: clamp(20px, 2vw, 32px); background: var(--surface-1);
-      border: 1px solid var(--border); border-radius: 4px;
-    }
-    .compare.new { background: #fff; border-top: 5px solid var(--primary); }
-    .compare.old { border-top: 5px solid var(--accent-warm); }
-    .compare h3 { color: var(--ink-muted); font-size: var(--fs-label); letter-spacing: 0.1em; text-transform: uppercase; }
-    .compare p { color: var(--ink); font-size: var(--fs-body); line-height: 1.32; font-weight: 550; align-self: center; }
-
-    /* ---------- takeaways ---------- */
-    .takeaways { align-self: center; display: grid; gap: clamp(14px, 2vh, 24px); }
-    .takeaway {
-      display: grid; grid-template-columns: clamp(120px, 12vw, 190px) minmax(0, 1fr);
-      gap: clamp(18px, 2vw, 32px); padding: clamp(14px, 1.8vh, 22px) 0;
-      border-top: 1px solid var(--border);
-    }
-    .takeaway:first-child { border-top: 0; }
-    .takeaway b { color: var(--primary); font-size: var(--fs-label); letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.4; }
-    .takeaway span { color: var(--ink); font-size: clamp(19px, 1.85vw, 28px); line-height: 1.26; font-weight: 620; }
-
-    /* ---------- footer ---------- */
-    .foot {
-      display: flex; align-items: center; justify-content: space-between; gap: 18px;
-      color: var(--ink-muted); font-size: var(--fs-caption);
-    }
-    .foot .rule { flex: 0 0 auto; width: clamp(48px, 6vw, 92px); height: 2px; background: var(--primary); }
-
-    /* ---------- entrance animation ----------
-       Robust by design: content is ALWAYS visible by default (opacity 1).
-       The rise animation is added only to the active slide, so if JS or the
-       IntersectionObserver ever fails to fire, slides never go blank. */
-    @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-    @media (prefers-reduced-motion: no-preference) {
-      .slide.is-active .slide__inner > * { animation: rise .6s ease both; }
-      .slide.is-active .body { animation-delay: .08s; }
-      .slide.is-active .foot { animation-delay: .16s; }
-    }
-
-    /* ================= fixed overlay UI ================= */
-    .hud {
-      position: fixed; z-index: 20; right: clamp(16px, 2vw, 32px); bottom: clamp(16px, 2.4vh, 30px);
-      display: flex; align-items: center; gap: 12px;
-    }
-    .counter {
-      font-variant-numeric: tabular-nums; color: var(--ink-muted);
-      font-size: var(--fs-caption); font-weight: 650; letter-spacing: 0.04em;
-    }
-    .counter b { color: var(--ink); font-weight: 800; }
-    .navbtn {
-      width: 38px; height: 38px; display: grid; place-items: center;
-      border: 1px solid var(--border); border-radius: 50%; background: #fff;
-      color: var(--ink-muted); cursor: pointer; transition: color .15s, border-color .15s, background .15s;
-      font-size: 20px; line-height: 1;
-    }
-    .navbtn:hover { color: var(--primary); border-color: var(--primary); }
-    .navbtn:disabled { opacity: 0.35; cursor: default; }
-
-    /* progress rail — one tick per slide */
-    .rail {
-      position: fixed; z-index: 20; right: clamp(14px, 1.6vw, 26px); top: 50%;
-      transform: translateY(-50%); display: grid; gap: 10px;
-    }
-    .rail button {
-      width: 9px; height: 9px; padding: 0; border: 0; border-radius: 50%;
-      background: var(--border); cursor: pointer; transition: background .2s, transform .2s;
-    }
-    .rail button:hover { background: var(--ink-muted); }
-    .rail button[aria-current="true"] { background: var(--primary); transform: scale(1.35); }
-
-    @media (max-width: 720px) { .rail { display: none; } }
-
-    /* ================= print / PDF export ================= */
     @media print {
-      html { scroll-snap-type: none; }
-      .hud, .rail { display: none !important; }
-      .slide {
-        min-height: auto; height: 100vh; page-break-after: always; border: 0;
-      }
-      .slide__inner > * { opacity: 1 !important; transform: none !important; }
+      html{scroll-snap-type:none;} .hud,.rail{display:none!important;}
+      .slide{min-height:auto; height:100vh; page-break-after:always; border:0;}
+      .slide .inner>*{opacity:1!important; transform:none!important;}
     }
   </style>
 </head>
 <body>
 
-  <!-- ============ SLIDE 1 · Title / Thesis ============ -->
-  <section class="slide" id="s1" aria-label="Title">
-    <div class="slide__inner">
-      <header class="head">
-        <div>
-          <span class="label" data-step="01">Title / Thesis</span>
-          <h1 class="title lg">Weak-binding 활성은 결국 site switching에서 온다.</h1>
-        </div>
-        <p class="paper-meta"><strong>Zhang et al., JACS 2025</strong><br>Why Do Weak-Binding M–N–C Single-Atom Catalysts Possess Anomalously High Oxygen Reduction Activity?</p>
-      </header>
-
-      <div class="body layout-hero">
-        <div class="thesis">
-          <p class="lead">Ni/Cu 계열 ORR anomaly를 <em>adsorption strength</em> 문제가 아니라 <em>O* geometry</em> 문제로 다시 읽는다.</p>
-          <div class="bridge">
-            <div class="site old"><b>old assumption</b><span>metal-atop O*</span></div>
-            <div class="arrow">→</div>
-            <div class="site new"><b>new pathway</b><span>M–N bridge O*</span></div>
-          </div>
-          <div class="tags">
-            <span>DFT</span><span>field response</span><span>solvation</span><span>microkinetics</span><span>XAS / XPS</span>
-          </div>
-        </div>
-        <figure class="figure paper">
-          <img src="assets/zhang2025_fig2_bridge_scaling.png" alt="Bridge adsorption motif and scaling relation">
-          <figcaption class="caption"><b>왜 이 그림인가:</b> Figure 2가 발표의 중심축. active site를 metal 하나가 아니라 M–N ensemble로 보게 만든다.</figcaption>
+  <!-- ===== 1 · HOOK / THESIS ===== -->
+  <section class="slide" aria-label="Title">
+    <div class="inner l-hero">
+      <div class="thesis">
+        <span class="kicker">Journal Club · ORR SAC</span>
+        <h1 class="title lg">약하게 붙는 촉매가 왜 더 잘 작동할까?</h1>
+        <p class="subtitle">기존 volcano 이론은 이 예외를 설명하지 못한다. <em>그래서</em> 이 논문은 질문을 바꾼다 — “얼마나 세게 붙나”가 아니라 “<em>어디에</em> 붙나”.</p>
+        <div class="flip"><span class="old">metal 위 (atop) O*</span><span class="to">→</span><span class="new">M–N 다리 (bridge) O*</span></div>
+        <p class="meta"><b>Zhang et al., JACS 2025</b> · Why Do Weak-Binding M–N–C Single-Atom Catalysts Possess Anomalously High Oxygen Reduction Activity?<br>DFT · field/solvation response · microkinetics · XAS/XPS</p>
+      </div>
+      <div class="figwrap">
+        <figure class="figstage" style="--ar:1.504">
+          <img src="assets/zhang2025_fig2_bridge_scaling.png" alt="Atop vs bridge adsorption motif and scaling">
+          <span class="anno rust" data-dir="d" style="top:60%; left:15%">같은 자리, 다른 위치: atop vs bridge</span>
+          <span class="anno" data-dir="l" style="top:20%; left:74%">이 지도가 논문의 씨앗</span>
         </figure>
       </div>
-
-      <footer class="foot"><span class="rule"></span><span>Computational catalysis · journal club</span></footer>
     </div>
   </section>
 
-  <!-- ============ SLIDE 2 · Scientific Problem ============ -->
-  <section class="slide" id="s2" aria-label="Scientific problem">
-    <div class="slide__inner">
-      <header class="head">
-        <div>
-          <span class="label" data-step="02">Scientific Problem</span>
-          <h2 class="title wide">고전적 metal-atop volcano는 weak-binding 활성을 놓친다.</h2>
-        </div>
-      </header>
-
-      <div class="body layout-split-l">
-        <figure class="figure">
-          <img src="assets/zhang2025_fig1_problem.png" alt="ORR activity anomaly for weak-binding M-N-C catalysts">
-          <figcaption class="caption"><b>읽는 법:</b> Ni/Cu/Zn 계열의 alkaline activity가 기존 volcano 직관과 어긋나는 지점이 출발점이다.</figcaption>
-        </figure>
-        <div class="evidence">
-          <div class="cue"><b>Expected</b><span>Moderate-binding metal이 ORR volcano 정점이어야 한다.</span></div>
-          <div class="cue"><b>Observed</b><span>Weak-binding Ni/Cu/Zn도 높은 activity를 보인다.</span></div>
-          <div class="cue warm"><b>Question</b><span>Descriptor가 아니라 adsorption <em>site</em> 가정이 틀린 것은 아닐까?</span></div>
-        </div>
+  <!-- ===== 2 · PROBLEM ===== -->
+  <section class="slide" aria-label="Problem">
+    <div class="inner l-figure">
+      <div class="head">
+        <span class="label" data-step="02">The Anomaly</span>
+        <h2 class="title">약하게 붙는 Ni·Cu·Zn이 활성을 잃지 않는다.</h2>
       </div>
-
-      <footer class="foot"><span class="rule"></span><span>Motivation</span></footer>
+      <div class="figwrap">
+        <figure class="figstage" style="--ar:1.620">
+          <img src="assets/zhang2025_fig1_problem.png" alt="Half-wave and onset potential across metals, alkaline vs acidic">
+          <span class="anno blue" data-dir="d" style="top:14%; left:37%">여긴 weak-binding인데도 활성이 높다</span>
+          <span class="anno" data-dir="u" style="top:70%; left:30%">보라 점선 = moderate ↔ weak 경계</span>
+        </figure>
+      </div>
+      <div class="sowhat"><span class="tag">그래서</span><p>활성이 결합 세기만으로 안 갈리면, <em>descriptor 자체가 무언가를 놓치고 있다</em>는 신호다.</p></div>
     </div>
   </section>
 
-  <!-- ============ SLIDE 3 · Conventional Understanding ============ -->
-  <section class="slide" id="s3" aria-label="Conventional understanding">
-    <div class="slide__inner">
-      <header class="head">
-        <div>
-          <span class="label" data-step="03">Conventional Understanding</span>
-          <h2 class="title wide">기존 모델은 O*를 metal center 위에 붙잡아 둔다.</h2>
-        </div>
-      </header>
-
-      <div class="body layout-split-r">
-        <div class="evidence">
-          <div class="cue"><b>Atop assumption</b><span>HOO*, O*, HO*가 같은 metal center 주변에서 이어진다고 본다.</span></div>
-          <div class="cue"><b>Consequence</b><span>Ni/Cu는 O* binding이 약해 HOO* → O* step에서 불리하다.</span></div>
-          <div class="cue warm"><b>Blind spot</b><span>N ligand는 coordination 환경일 뿐, reaction site로 취급되지 않는다.</span></div>
-        </div>
-        <figure class="figure">
-          <img src="assets/zhang2025_fig4_4e_focus.png" alt="Atop and bridge pathway comparison in ORR microkinetics">
-          <figcaption class="caption">기존 volcano 언어는 유용하지만, active geometry를 고정하면 mechanism을 놓칠 수 있다.</figcaption>
+  <!-- ===== 3 · CONVENTIONAL VIEW ===== -->
+  <section class="slide" aria-label="Conventional view">
+    <div class="inner l-split rev">
+      <div class="figwrap">
+        <figure class="figstage" style="--ar:2.574">
+          <img src="assets/zhang2025_fig4_4e_focus.png" alt="Atop-only 4-electron ORR pathway on the metal center">
+          <span class="anno" data-dir="d" style="top:22%; left:50%">모든 중간체가 metal center 하나 위에서만</span>
         </figure>
       </div>
-
-      <footer class="foot"><span class="rule"></span><span>Baseline model</span></footer>
+      <div class="head">
+        <span class="label" data-step="03">The Old Picture</span>
+        <h2 class="title">정설은 O*를 metal 위에 붙잡아 둔다.</h2>
+        <p class="subtitle">HOO*→O*→HO*가 전부 같은 금속 원자 위. <em>그러면</em> 약하게 붙는 금속은 O* 단계에서 무조건 손해다. N은 그저 배경 취급.</p>
+      </div>
     </div>
   </section>
 
-  <!-- ============ SLIDE 4 · New Idea / Hypothesis ============ -->
-  <section class="slide" id="s4" aria-label="New idea">
-    <div class="slide__inner">
-      <header class="head">
-        <div>
-          <span class="label" data-step="04">New Idea / Hypothesis</span>
-          <h2 class="title wide">Bridge O*가 N ligand를 active ensemble로 끌어들인다.</h2>
-        </div>
-      </header>
-
-      <div class="body layout-split-l">
-        <figure class="figure">
-          <img src="assets/zhang2025_fig2_bridge_scaling.png" alt="Bridge O adsorption stabilizes weak-binding catalysts">
-          <figcaption class="caption"><b>핵심:</b> Bridge motif를 허용하면 O*/HO* scaling이 달라진다. descriptor가 geometry에 의존한다.</figcaption>
-        </figure>
-        <div class="evidence">
-          <div class="cue"><b>Site switch</b><span>O*가 metal atop에서 M–N bridge site로 이동한다.</span></div>
-          <div class="cue"><b>Scaling shift</b><span>Ni/Cu에서 bridge O* 안정화가 weak-binding penalty를 줄인다.</span></div>
-          <div class="cue warm"><b>Interpretation</b><span>Active site는 metal atom 하나가 아니라 <em>M–N ensemble</em>이다.</span></div>
-        </div>
+  <!-- ===== 4 · NEW IDEA ===== -->
+  <section class="slide" aria-label="New idea">
+    <div class="inner l-figure">
+      <div class="head">
+        <span class="label" data-step="04">The Move</span>
+        <h2 class="title">O*가 M–N 다리로 옮겨가면, N도 활성 자리가 된다.</h2>
       </div>
-
-      <footer class="foot"><span class="rule"></span><span>Conceptual center</span></footer>
+      <div class="figwrap">
+        <figure class="figstage" style="--ar:1.504">
+          <img src="assets/zhang2025_fig2_bridge_scaling.png" alt="Bridge site preference map and scaling change">
+          <span class="anno rust" data-dir="d" style="top:63%; left:15%">bridge = O*가 금속–N 사이에</span>
+          <span class="anno blue" data-dir="l" style="top:33%; left:73%">✕ 표시 = bridge를 선호하는 site</span>
+        </figure>
+      </div>
+      <div class="sowhat"><span class="tag">그래서</span><p>활성 자리는 금속 원자 하나가 아니라 <em>M–N 앙상블</em>이다 — 이게 논문의 개념적 중심.</p></div>
     </div>
   </section>
 
-  <!-- ============ SLIDE 5 · Computational Setup ============ -->
-  <section class="slide" id="s5" aria-label="Computational setup">
-    <div class="slide__inner">
-      <header class="head">
-        <div>
-          <span class="label" data-step="05">Computational Setup</span>
-          <h2 class="title wide">계산은 geometry를 interface response와 연결한다.</h2>
-        </div>
-      </header>
-
-      <div class="body layout-split-l">
-        <figure class="figure">
-          <img src="assets/zhang2025_fig3_field_solvation.png" alt="Electric-field and solvation response for atop and bridge O adsorption">
-          <figcaption class="caption">Figure 3: adsorption energy 하나로 끝나지 않고 electrochemical interface 항까지 끌고 간다.</figcaption>
+  <!-- ===== 5 · MECHANISM / SCALING ===== -->
+  <section class="slide" aria-label="Scaling">
+    <div class="inner l-split">
+      <div class="figwrap">
+        <figure class="figstage" style="--ar:1.504">
+          <img src="assets/zhang2025_fig2_bridge_scaling.png" alt="Scaling relations for atop vs bridge O adsorption">
+          <span class="anno" data-dir="u" style="top:70%; left:22%">atop 기울기 1.79</span>
+          <span class="anno rust" data-dir="u" style="top:88%; left:26%">bridge 1.36 → 완만</span>
         </figure>
-        <div class="evidence">
-          <div class="cue"><b>01 · DFT</b><span>Atop / bridge adsorption geometry를 먼저 비교한다.</span></div>
-          <div class="cue"><b>02 · Interface</b><span>Electric field와 solvation response를 site별로 분리한다.</span></div>
-          <div class="cue warm"><b>03 · Kinetics</b><span>그 차이를 pH-dependent volcano로 연결한다.</span></div>
-        </div>
       </div>
-
-      <footer class="foot"><span class="rule"></span><span>Modeling strategy</span></footer>
+      <div class="head">
+        <span class="label" data-step="05">Why It Works</span>
+        <h2 class="title">기하가 scaling 관계를 바꾼다.</h2>
+        <p class="subtitle">bridge는 E<sub>O*</sub>–E<sub>HO*</sub> 기울기를 낮춰(1.79→1.36) weak-binding penalty를 줄인다. <em>즉</em> descriptor가 위치에 의존한다.</p>
+      </div>
     </div>
   </section>
 
-  <!-- ============ SLIDE 6 · Main Result ============ -->
-  <section class="slide" id="s6" aria-label="Main result">
-    <div class="slide__inner">
-      <header class="head">
-        <div>
-          <span class="label" data-step="06">Main Result</span>
-          <h2 class="title wide">Bridge-O*가 volcano를 weak-binding metal 쪽으로 옮긴다.</h2>
-        </div>
-      </header>
-
-      <div class="body layout-split-l">
-        <figure class="figure">
-          <img src="assets/zhang2025_fig4_volcano_clean.png" alt="pH-dependent volcanoes for atop and bridge pathways">
-          <figcaption class="caption"><b>읽는 법:</b> 단순 adsorption plot이 아니라 pH-dependent activity prediction이다.</figcaption>
-        </figure>
-        <div class="evidence">
-          <div class="cue"><b>Atop path</b><span>Weak-binding metal은 HOO* → O* bottleneck으로 낮게 예측된다.</span></div>
-          <div class="cue"><b>Bridge path</b><span>High-activity region이 Ni/Cu 쪽으로 열린다.</span></div>
-          <div class="cue warm"><b>Meaning</b><span>Site geometry가 kinetic descriptor로 작동한다.</span></div>
-        </div>
+  <!-- ===== 6 · INTERFACE ===== -->
+  <section class="slide" aria-label="Interface">
+    <div class="inner l-figure">
+      <div class="head">
+        <span class="label" data-step="06">Not Just Energy</span>
+        <h2 class="title">위치가 field·용매 반응까지 바꾼다.</h2>
       </div>
-
-      <footer class="foot"><span class="rule"></span><span>Microkinetic core</span></footer>
+      <div class="figwrap">
+        <figure class="figstage" style="--ar:1.481">
+          <img src="assets/zhang2025_fig3_field_solvation.png" alt="Electric field and solvation response for atop vs bridge">
+          <span class="anno rust" data-dir="l" style="top:22%; left:50%">atop와 bridge가 전기장에 다르게 반응</span>
+          <span class="anno" data-dir="u" style="top:78%; left:52%">용매 안정화도 위치별로 갈린다</span>
+        </figure>
+      </div>
+      <div class="sowhat"><span class="tag">그래서</span><p>field·solvation은 보정항이 아니라 <em>메커니즘의 일부</em> — pH 의존 kinetics가 site 전환에 민감해진다.</p></div>
     </div>
   </section>
 
-  <!-- ============ SLIDE 7 · Mechanism / Interpretation ============ -->
-  <section class="slide" id="s7" aria-label="Mechanism">
-    <div class="slide__inner">
-      <header class="head">
-        <div>
-          <span class="label" data-step="07">Mechanism / Interpretation</span>
-          <h2 class="title wide">Geometry가 field와 solvation response를 바꾼다.</h2>
-        </div>
-      </header>
-
-      <div class="body layout-split-r">
-        <div class="evidence">
-          <div class="cue"><b>Field</b><span>Atop O*와 bridge O*는 electric field에 다르게 반응한다.</span></div>
-          <div class="cue"><b>Solvation</b><span>용매 안정화도 site geometry에 따라 달라진다.</span></div>
-          <div class="cue warm"><b>Mechanism</b><span>그래서 pH-dependent kinetics가 site switch에 민감해진다.</span></div>
-        </div>
-        <figure class="figure">
-          <img src="assets/zhang2025_fig3_field_solvation.png" alt="Field and solvation response support bridge adsorption mechanism">
-          <figcaption class="caption"><b>포인트:</b> field / solvation은 correction이 아니라 mechanism의 일부다.</figcaption>
+  <!-- ===== 7 · MAIN RESULT ===== -->
+  <section class="slide" aria-label="Main result">
+    <div class="inner l-figure">
+      <div class="head">
+        <span class="label" data-step="07">The Payoff</span>
+        <h2 class="title">bridge 경로는 volcano 정점을 weak-binding 쪽으로 민다.</h2>
+      </div>
+      <div class="figwrap">
+        <figure class="figstage" style="--ar:1.306">
+          <img src="assets/zhang2025_fig4_volcano_clean.png" alt="Atop vs bridge pH-dependent activity volcanoes">
+          <span class="anno blue" data-dir="d" style="top:10%; left:18%">atop: 정점이 강결합 쪽 → 약결합 금속 탈락</span>
+          <span class="anno rust" data-dir="d" style="top:10%; left:70%">bridge: 정점이 오른쪽 이동 → Cu가 활성 구간으로</span>
         </figure>
       </div>
-
-      <footer class="foot"><span class="rule"></span><span>Interface response</span></footer>
+      <div class="sowhat"><span class="tag">그래서</span><p>site 기하가 곧 <em>kinetic descriptor</em>로 작동한다 — anomaly가 예측 안으로 들어온다.</p></div>
     </div>
   </section>
 
-  <!-- ============ SLIDE 8 · Validation / Benchmark ============ -->
-  <section class="slide" id="s8" aria-label="Validation">
-    <div class="slide__inner">
-      <header class="head">
-        <div>
-          <span class="label" data-step="08">Validation / Benchmark</span>
-          <h2 class="title wide">활성과 분광학이 같은 bridge-O* 그림을 가리킨다.</h2>
-        </div>
-      </header>
-
-      <div class="body layout-split-l">
-        <figure class="figure">
-          <img src="assets/zhang2025_fig6_validation.png" alt="Activity and spectroscopy validation of bridge-O model">
-          <figcaption class="caption">Activity · spectroscopy · electronic-structure evidence가 bridge-O* 해석으로 수렴한다.</figcaption>
+  <!-- ===== 8 · VALIDATION ===== -->
+  <section class="slide" aria-label="Validation">
+    <div class="inner l-split rev">
+      <div class="figwrap">
+        <figure class="figstage" style="--ar:1.124">
+          <img src="assets/zhang2025_fig6_validation.png" alt="Activity and spectroscopy validation of bridge model">
+          <span class="anno rust" data-dir="r" style="top:24%; left:40%">활성 예측이 실험 경향과 일치</span>
+          <span class="anno blue" data-dir="u" style="top:74%; left:52%">XAS·XPS가 N–O signature</span>
         </figure>
-        <div class="evidence">
-          <div class="cue"><b>Activity</b><span>Simulated onset potential과 TOF trend가 experiment와 맞는다.</span></div>
-          <div class="cue"><b>Spectroscopy</b><span>N K-edge XAS와 N 1s XPS가 N–O 관련 signature를 보인다.</span></div>
-          <div class="cue warm"><b>Caution</b><span>Interface dynamics가 직접 관찰된 것은 아니다.</span></div>
-        </div>
       </div>
-
-      <footer class="foot"><span class="rule"></span><span>Validation stack</span></footer>
+      <div class="head">
+        <span class="label" data-step="08">Does It Hold?</span>
+        <h2 class="title">활성과 분광학이 같은 그림을 가리킨다.</h2>
+        <p class="subtitle">계산 onset·TOF 경향이 실험과 맞고, N K-edge XAS와 N 1s XPS가 N–O 관여를 시사한다. <em>다만</em> interface 동역학을 직접 본 것은 아니다.</p>
+      </div>
     </div>
   </section>
 
-  <!-- ============ SLIDE 9 · Limitations ============ -->
-  <section class="slide" id="s9" aria-label="Limitations">
-    <div class="slide__inner">
-      <header class="head">
-        <div>
-          <span class="label" data-step="09">Limitations / Assumptions</span>
-          <h2 class="title wide">약한 고리는 electrochemical interface 모델이다.</h2>
-        </div>
-      </header>
-
-      <div class="body layout-split-r">
-        <div class="evidence">
-          <div class="cue"><b>Static DFT</b><span>Finite-T electrolyte에서 bridge O* accessibility는 직접 sampling되지 않았다.</span></div>
-          <div class="cue"><b>Interface</b><span>Field mapping · solvation · capacitance 선택이 kinetic 예측을 흔들 수 있다.</span></div>
-          <div class="cue warm"><b>Model gap</b><span>Model catalyst는 명료하지만, 실제 SAC site는 더 disorder되어 있다.</span></div>
-        </div>
-        <figure class="figure">
-          <img src="assets/zhang2025_fig5_experiment_model.png" alt="Model catalysts used for experimental validation">
-          <figcaption class="caption">Model catalyst는 mechanism을 분리해 주지만, operando 환경의 불확실성을 다 없애지는 못한다.</figcaption>
-        </figure>
+  <!-- ===== 9 · CRITIQUE (reviewer voice) ===== -->
+  <section class="slide" aria-label="Critique">
+    <div class="inner l-crit">
+      <div class="head">
+        <span class="label" data-step="09">My Read</span>
+        <p class="verdict">설득력 있는 재해석이지만, 결론을 떠받치는 가장 약한 고리는 <em>electrochemical interface 모델</em>이다.</p>
       </div>
-
-      <footer class="foot"><span class="rule"></span><span>Critical read</span></footer>
+      <div class="risks">
+        <div class="risk"><b>Static DFT</b><span>유한 온도 전해질에서 bridge O*가 실제로 접근 가능한지 직접 sampling되지 않았다.</span></div>
+        <div class="risk"><b>Interface 가정</b><span>field mapping·solvation·capacitance 선택이 pH 의존 kinetic 예측을 흔들 수 있다.</span></div>
+        <div class="risk"><b>Model ↔ real gap</b><span>molecular model 촉매는 명료하지만, 실제 SAC site는 더 무질서하다.</span></div>
+      </div>
     </div>
   </section>
 
-  <!-- ============ SLIDE 10 · Discussion / Take-home ============ -->
-  <section class="slide" id="s10" aria-label="Take-home">
-    <div class="slide__inner">
-      <header class="head">
-        <div>
-          <span class="label" data-step="10">Discussion / Take-home</span>
-          <h2 class="title">ORR은 metal-atop O*에 갇혀 있지 않다.</h2>
-        </div>
-      </header>
-
-      <div class="body layout-split-r">
-        <div class="takeaways">
-          <div class="takeaway"><b>Scientific claim</b><span>O*가 M–N bridge site로 전환되면 weak-binding에서도 활성이 살아난다.</span></div>
-          <div class="takeaway"><b>Computational lesson</b><span>Adsorption geometry는 scaling · field · solvation · kinetics를 함께 바꾼다.</span></div>
-          <div class="takeaway"><b>Group question</b><span>AIMD/MLIP sampling으로 bridge O*가 실제 electrolyte에서 안정한지 볼 수 있을까?</span></div>
-        </div>
-        <figure class="figure paper">
-          <img src="assets/zhang2025_fig2_bridge_scaling.png" alt="Bridge O adsorption as the final take-home visual">
-          <figcaption class="caption"><b>Final question:</b> bridge-O*가 operando condition에서도 accessible한가?</figcaption>
-        </figure>
+  <!-- ===== 10 · DISCUSSION / BOOKEND ===== -->
+  <section class="slide" aria-label="Discussion">
+    <div class="inner">
+      <div class="head">
+        <span class="label" data-step="10">Let's Discuss</span>
+        <h2 class="title">우리가 다음에 계산한다면?</h2>
       </div>
-
-      <footer class="foot"><span class="rule"></span><span>Zhang et al., JACS 2025</span></footer>
+      <div class="qs">
+        <div class="q"><b>1</b><span>AIMD/MLIP로 explicit 전해질에서 bridge O*가 정말 안정한지 검증할 수 있을까?</span></div>
+        <div class="q"><b>2</b><span>어떤 계산이 이 메커니즘을 <em>반증</em>할 수 있나 — 어디를 보면 bridge 그림이 깨지나?</span></div>
+        <div class="q"><b>3</b><span>이 site-switching 논리가 ORR 밖(OER·CO₂RR)의 다른 SAC anomaly에도 적용될까?</span></div>
+      </div>
+      <div class="bookend">돌아온 결론 — 약한 결합의 활성은 <em>site switching</em>에서 온다. ORR은 metal-atop O*에 갇혀 있지 않다.</div>
     </div>
   </section>
 
-  <!-- ============ fixed overlay UI ============ -->
+  <!-- fixed UI -->
   <nav class="rail" aria-label="Slide progress"></nav>
   <div class="hud">
-    <button class="navbtn" type="button" data-prev aria-label="Previous slide">‹</button>
+    <button class="nb" data-prev aria-label="Previous">‹</button>
     <span class="counter"><b>1</b> / 10</span>
-    <button class="navbtn" type="button" data-next aria-label="Next slide">›</button>
+    <button class="nb" data-next aria-label="Next">›</button>
   </div>
 
   <script>
-    const slides = Array.from(document.querySelectorAll(".slide"));
-    const counter = document.querySelector(".counter");
-    const rail = document.querySelector(".rail");
-    const prevBtn = document.querySelector("[data-prev]");
-    const nextBtn = document.querySelector("[data-next]");
-    let current = 0;
-
-    // build progress rail — one dot per slide
-    slides.forEach((slide, i) => {
-      const dot = document.createElement("button");
-      dot.type = "button";
-      dot.setAttribute("aria-label", `Go to slide ${i + 1}`);
-      dot.addEventListener("click", () => goTo(i));
-      rail.appendChild(dot);
-    });
-    const dots = Array.from(rail.children);
-
-    function setActive(i) {
-      current = i;
-      counter.innerHTML = `<b>${i + 1}</b> / ${slides.length}`;
-      dots.forEach((d, j) => d.setAttribute("aria-current", j === i ? "true" : "false"));
-      slides.forEach((s, j) => s.classList.toggle("is-active", j === i));
-      prevBtn.disabled = i === 0;
-      nextBtn.disabled = i === slides.length - 1;
-      const hash = `#s${i + 1}`;
-      if (location.hash !== hash) history.replaceState(null, "", hash);
-    }
-
-    function goTo(i) {
-      i = Math.max(0, Math.min(i, slides.length - 1));
-      slides[i].scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    // track which slide fills the viewport → drives counter, rail, animation
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.55) {
-          setActive(slides.indexOf(entry.target));
-        }
-      });
-    }, { threshold: [0.55] });
-    slides.forEach((s) => io.observe(s));
-
-    prevBtn.addEventListener("click", () => goTo(current - 1));
-    nextBtn.addEventListener("click", () => goTo(current + 1));
-
-    // keyboard: arrows / space / pageup-down / home / end
-    window.addEventListener("keydown", (e) => {
-      const fwd = ["ArrowRight", "ArrowDown", "PageDown", " "];
-      const back = ["ArrowLeft", "ArrowUp", "PageUp"];
-      if (fwd.includes(e.key)) { e.preventDefault(); goTo(current + 1); }
-      else if (back.includes(e.key)) { e.preventDefault(); goTo(current - 1); }
-      else if (e.key === "Home") { e.preventDefault(); goTo(0); }
-      else if (e.key === "End") { e.preventDefault(); goTo(slides.length - 1); }
-    });
-
-    // honor a deep link on load
-    const m = location.hash.match(/^#s(\d+)$/);
-    if (m) { const i = Number(m[1]) - 1; if (slides[i]) requestAnimationFrame(() => goTo(i)); }
-    setActive(current);
+    const slides=[...document.querySelectorAll(".slide")];
+    const counter=document.querySelector(".counter");
+    const rail=document.querySelector(".rail");
+    const prev=document.querySelector("[data-prev]");
+    const next=document.querySelector("[data-next]");
+    let cur=0;
+    slides.forEach((s,i)=>{ const b=document.createElement("button"); b.type="button";
+      b.setAttribute("aria-label",`Slide ${i+1}`); b.onclick=()=>go(i); rail.appendChild(b); });
+    const dots=[...rail.children];
+    function set(i){ cur=i; counter.innerHTML=`<b>${i+1}</b> / ${slides.length}`;
+      dots.forEach((d,j)=>d.setAttribute("aria-current",j===i?"true":"false"));
+      slides.forEach((s,j)=>s.classList.toggle("on",j===i));
+      prev.disabled=i===0; next.disabled=i===slides.length-1;
+      const h=`#s${i+1}`; if(location.hash!==h) history.replaceState(null,"",h); }
+    function go(i){ i=Math.max(0,Math.min(i,slides.length-1)); slides[i].scrollIntoView({behavior:"smooth",block:"start"}); }
+    const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting&&e.intersectionRatio>=.55) set(slides.indexOf(e.target)); }),{threshold:[.55]});
+    slides.forEach(s=>io.observe(s));
+    prev.onclick=()=>go(cur-1); next.onclick=()=>go(cur+1);
+    addEventListener("keydown",e=>{ const f=["ArrowRight","ArrowDown","PageDown"," "],b=["ArrowLeft","ArrowUp","PageUp"];
+      if(f.includes(e.key)){e.preventDefault();go(cur+1);} else if(b.includes(e.key)){e.preventDefault();go(cur-1);}
+      else if(e.key==="Home"){e.preventDefault();go(0);} else if(e.key==="End"){e.preventDefault();go(slides.length-1);} });
+    const m=location.hash.match(/^#s(\d+)$/); if(m&&slides[+m[1]-1]) requestAnimationFrame(()=>go(+m[1]-1));
+    set(0);
   </script>
 </body>
 </html>
